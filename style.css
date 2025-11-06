@@ -98,6 +98,10 @@ div.contador-visitas { /* Especificamos div.contador-visitas para evitar conflic
     font-size: 0.9rem;
 }
 
+.contador-visitas script {
+    vertical-align: middle; /* Alinea el contador con el texto */
+}
+
 .contador-numero {
     color: var(--color-primario);
     font-weight: bold;

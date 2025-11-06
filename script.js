@@ -23,9 +23,6 @@ document.addEventListener('DOMContentLoaded', () => {
         estanteria.innerHTML = '<p class="libro-placeholder">No se pudo cargar la biblioteca. El grimorio de datos podría estar corrupto o ausente.</p>';
     }
 
-    // Iniciar el contador de visitas al cargar la página
-    actualizarContadorDeVisitas();
-
     /**
      * Genera una cadena de texto con símbolos de aspecto ocultista.
      * @returns {string} Una cadena de texto con símbolos aleatorios.
@@ -109,27 +106,6 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Error al copiar el texto: ', err);
             alert('No se pudo copiar el enlace.');
         });
-    }
-
-    /**
-     * Obtiene y actualiza el contador de visitas usando un servicio externo.
-     */
-    function actualizarContadorDeVisitas() {
-        const contadorEl = document.getElementById('contador');
-        if (!contadorEl) return;
-
-        const namespace = 'magiacaotica.github.io'; // Un nombre único para tu sitio
-        const key = 'biblioteca-caotica'; // Una clave única para este contador específico
-
-        fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
-            .then(res => res.json())
-            .then(data => {
-                contadorEl.textContent = data.value.toLocaleString('es-ES');
-            })
-            .catch(error => {
-                console.error('Error al contactar el oráculo de visitas:', error);
-                contadorEl.textContent = '???';
-            });
     }
 
     // Inicia o reinicia la vista de la biblioteca
