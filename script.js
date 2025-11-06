@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let indiceLibrosMostrados = 0;
     const LIBROS_POR_PAGINA = 12; // Un número divisible por 2, 3 y 4 para un buen grid.
     let estaCargando = false;
+
     // Usar los datos incrustados desde biblioteca_datos.js
     if (typeof BIBLIOTECA_DATOS !== 'undefined' && BIBLIOTECA_DATOS.length > 0) {
         todosLosLibros = BIBLIOTECA_DATOS;
@@ -21,6 +22,9 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('Error: La variable BIBLIOTECA_DATOS no está definida o está vacía.');
         estanteria.innerHTML = '<p class="libro-placeholder">No se pudo cargar la biblioteca. El grimorio de datos podría estar corrupto o ausente.</p>';
     }
+
+    // Iniciar el contador de visitas al cargar la página
+    actualizarContadorDeVisitas();
 
     /**
      * Genera una cadena de texto con símbolos de aspecto ocultista.
@@ -105,6 +109,27 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Error al copiar el texto: ', err);
             alert('No se pudo copiar el enlace.');
         });
+    }
+
+    /**
+     * Obtiene y actualiza el contador de visitas usando un servicio externo.
+     */
+    function actualizarContadorDeVisitas() {
+        const contadorEl = document.getElementById('contador');
+        if (!contadorEl) return;
+
+        const namespace = 'magiacaotica.github.io'; // Un nombre único para tu sitio
+        const key = 'biblioteca-caotica'; // Una clave única para este contador específico
+
+        fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
+            .then(res => res.json())
+            .then(data => {
+                contadorEl.textContent = data.value.toLocaleString('es-ES');
+            })
+            .catch(error => {
+                console.error('Error al contactar el oráculo de visitas:', error);
+                contadorEl.textContent = '???';
+            });
     }
 
     // Inicia o reinicia la vista de la biblioteca

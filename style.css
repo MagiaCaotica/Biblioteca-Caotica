@@ -26,6 +26,34 @@ header {
     border-bottom: 1px solid var(--color-borde);
 }
 
+.header-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid var(--color-borde);
+    background-color: rgba(0,0,0,0.2);
+}
+
+.language-flags {
+    display: flex;
+    justify-content: center; /* Centra las banderas */
+    gap: 8px; /* Espacio entre banderas */
+    flex-wrap: wrap; /* Permite que las banderas se envuelvan en pantallas pequeñas */
+}
+
+.language-flags .google_translate img {
+    cursor: pointer;
+    margin-right: 8px; /* Mantenemos el margen que tenías */
+    opacity: 1.0;
+    transition: opacity 0.3s ease;
+}
+.language-flags .google_translate:hover img {
+    opacity: 0.30;
+}
+
 .titulo-container {
     display: flex;
     justify-content: center;
@@ -47,7 +75,7 @@ header h1 {
     text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
 }
 
-header p {
+header p.subtitulo {
     color: var(--color-texto-secundario);
     font-style: italic;
 }
@@ -61,6 +89,19 @@ footer {
     color: var(--color-texto-secundario);
     border-top: 1px solid var(--color-borde);
     background-color: rgba(0,0,0,0.2);
+}
+
+/* El contador de visitas ahora está dentro de .header-meta */
+div.contador-visitas { /* Especificamos div.contador-visitas para evitar conflictos */
+    font-family: var(--fuente-titulos);
+    color: var(--color-texto-secundario);
+    font-size: 0.9rem;
+}
+
+.contador-numero {
+    color: var(--color-primario);
+    font-weight: bold;
+    margin-left: 0.5rem;
 }
 
 .enlaces-comunidad a {
@@ -351,5 +392,8 @@ main {
     .preview-container {
         width: 90%; /* Hacemos la previsualización un poco más grande en móviles */
     }
-}
+    .header-meta {
+        flex-direction: column;
+        align-items: center;
+    }
 }
