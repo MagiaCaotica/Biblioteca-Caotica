@@ -180,11 +180,10 @@ main {
     border-radius: 10px;
     align-self: flex-start;
 }
-.libro a {
+.libro .boton-principal {
     color: var(--color-primario);
     text-decoration: none;
     font-weight: bold;
-    margin: 1rem auto 0 auto; /* Centra el botón y añade espacio superior */
     align-self: center;
     padding: 0.6rem 1.2rem;
     border: 1px solid var(--color-primario);
@@ -192,9 +191,44 @@ main {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.libro a:hover {
+.libro .boton-principal:hover {
     background-color: var(--color-primario);
     color: var(--color-fondo);
+}
+
+.libro-acciones {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.botones-compartir {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.boton-compartir {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 35px;
+    height: 35px;
+    border: 1px solid var(--color-texto-secundario);
+    border-radius: 50%; /* Círculo perfecto */
+    color: var(--color-texto-secundario);
+    text-decoration: none;
+    font-family: var(--fuente-titulos);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.boton-compartir:hover {
+    background-color: var(--color-primario);
+    color: var(--color-fondo);
+    border-color: var(--color-primario);
+    transform: scale(1.1);
 }
 
 .libro-placeholder {

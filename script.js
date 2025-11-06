@@ -79,14 +79,32 @@ document.addEventListener('DOMContentLoaded', () => {
                 <p class="autor">Por: ${libro.autor}</p>
                 <p class="resumen">${libro.resumen || 'No hay resumen disponible.'}</p>
                 <p class="categoria">${libro.categoria}</p>
-                <p class="idioma">Idioma: ${libro.idioma || 'No especificado'}</p>
-                <a href="${crearLinkAdfocus(libro.link)}" target="_blank" rel="noopener noreferrer">Descargar Tomo</a>
+                <div class="libro-meta">
+                    <p class="idioma">Idioma: ${libro.idioma || 'No especificado'}</p>
+                </div>
+                <div class="libro-acciones">
+                    <a href="${crearLinkAdfocus(libro.link)}" target="_blank" rel="noopener noreferrer" class="boton-principal">Descargar Tomo</a>
+                    <div class="botones-compartir">
+                        <a href="https://twitter.com/intent/tweet?text=He%20encontrado%20el%20tomo%20'${encodeURIComponent(libro.titulo)}'%20en%20la%20Biblioteca%20Ocultista:&url=${encodeURIComponent('https://magiacaotica.github.io/Biblioteca-Caotica/')}" target="_blank" rel="noopener noreferrer" class="boton-compartir" title="Compartir en X/Twitter">X</a>
+                        <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent('https://magiacaotica.github.io/Biblioteca-Caotica/')}&quote=He%20encontrado%20el%20tomo%20'${encodeURIComponent(libro.titulo)}'%20en%20la%20Biblioteca%20Ocultista" target="_blank" rel="noopener noreferrer" class="boton-compartir" title="Compartir en Facebook">f</a>
+                        <a href="https://api.whatsapp.com/send?text=He%20encontrado%20el%20tomo%20'${encodeURIComponent(libro.titulo)}'%20en%20la%20Biblioteca%20Ocultista:%20${encodeURIComponent('https://magiacaotica.github.io/Biblioteca-Caotica/')}" target="_blank" rel="noopener noreferrer" class="boton-compartir" title="Compartir en WhatsApp">✆</a>
+                    </div>
+                </div>
             `;
             estanteria.appendChild(divLibro);
         });
 
         indiceLibrosMostrados = fin;
         estaCargando = false;
+    }
+
+    function copiarAlPortapapeles(texto) {
+        navigator.clipboard.writeText(texto).then(() => {
+            alert('¡Enlace copiado al portapapeles!');
+        }, (err) => {
+            console.error('Error al copiar el texto: ', err);
+            alert('No se pudo copiar el enlace.');
+        });
     }
 
     // Inicia o reinicia la vista de la biblioteca
