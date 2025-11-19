@@ -11,6 +11,17 @@ const BIBLIOTECA_DATOS = [
         "costo_total": 0.000126
     },
     {
+    "autor": "Zener de Cydonia",
+    "titulo": "Runas Cazadoras del Caos",
+    "resumen": "Zener de Cydonia: 'Runas Cazadoras del Caos'. Un innovador sistema de adivinación caota y metaparadigmático. Aprende a utilizar las fichas de ajedrez como herramientas místicas para navegar las corrientes del caos, interpretar la realidad y desvelar respuestas ocultas.",
+    "categoria": "Magia del Caos",
+    "idioma": "Español",
+    "link": "https://mega.nz/file/SQFUDRwa#2aZ3Tb_iFBweFL4nYz65XyayaNJGdBUTlPvNjio50c4",
+    "costo_correccion": 0,
+    "costo_resumen": 0,
+    "costo_total": 0.000
+},
+    {
         "autor": "A, Besant",
         "titulo": "Blavatsky y los Maestros",
         "resumen": "Besant A. desvela el enigmático mundo de Blavatsky y los Maestros. Descubre la sabiduría oculta y las verdades esenciales que cimentaron la Teosofía. Un viaje imprescindible al corazón del esoterismo y la conexión con guías espirituales.",
@@ -14695,4 +14706,5 @@ const BIBLIOTECA_DATOS = [
         "costo_resumen": 7.105e-05,
         "costo_total": 0.00013755
     }
+
 ];
