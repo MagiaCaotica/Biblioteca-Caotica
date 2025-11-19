@@ -20,7 +20,7 @@ const BIBLIOTECA_DATOS = [
     "costo_correccion": 0,
     "costo_resumen": 0,
     "costo_total": 0.000
-},
+    },
     {
         "autor": "A, Besant",
         "titulo": "Blavatsky y los Maestros",
@@ -14708,3 +14708,4 @@ const BIBLIOTECA_DATOS = [
     }
 
 ];
+
