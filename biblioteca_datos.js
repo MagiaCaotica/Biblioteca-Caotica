@@ -1,5 +1,16 @@
 const BIBLIOTECA_DATOS = [
     {
+    "author": "Christopher Penczak",
+    "title": "City Magick: Spells, Rituals, and Symbols for the Urban Witch",
+    "summary": "City Magick: Spells, Rituals, and Symbols for the Urban Witch. This work challenges the belief that magic only resides in nature, revealing the magical potential and vital pulse of cities. The author, Christopher Penczak, offers a guide to modern urban shamanism, exploring metropolitan spirits, modern temples (including techno-temples), and the use of urban symbols like runes, helping practitioners recognize the sacred in the urban environment.",
+    "category": "Occultism/Witchcraft/Urban Shamanism",
+    "language": "English",
+    "link": "https://mega.nz/file/uN0BmLqJ#HJGs1HSanT8H5jWEixh3vTrphcx7PZ48J2xmGc3NCvQ",
+    "correction_cost": 0,
+    "summary_cost": 0,
+    "total_cost": 0
+    },
+    {
         "autor": "A, Bailey",
         "titulo": "Iniciación Humana y Solar",
         "resumen": "A. Bailey: 'Iniciación Humana y Solar'. Guía esencial para la evolución consciente. Descubre los misterios de las iniciaciones espirituales que elevan el ser humano y lo conectan al vasto plan cósmico. Despierta tu propósito interior.",
@@ -14708,4 +14719,5 @@ const BIBLIOTECA_DATOS = [
     }
 
 ];
+
 
