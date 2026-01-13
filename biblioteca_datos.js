@@ -1,5 +1,302 @@
 const BIBLIOTECA_DATOS = [
     {
+        "autor": "Jaq D Hawkins",
+        "titulo": "Chaonomicon",
+        "resumen": "Jaq D Hawkins explora el 'Chaonomicon', una guía profunda sobre la magia del caos. Descubre técnicas y teorías para manifestar cambios en la realidad a través de la voluntad y la flexibilidad mágica.",
+        "categoria": "Magia del Caos",
+        "idioma": "Inglés",
+        "link": "https://mega.nz/file/jBVmnKpQ#lU6R3n-V9-TXfoSYfYLZPrRyR9hZHtaBxzkcXx9_BS8",
+        "costo_correccion": 0.000060,
+        "costo_resumen": 0.000065,
+        "costo_total": 0.000125
+    },
+    {
+        "autor": "Monique Joiner Siedlak",
+        "titulo": "Hechizos de Abundancia",
+        "resumen": "Siedlak presenta una colección de rituales y hechizos enfocados en atraer la prosperidad. Una herramienta práctica para quienes buscan mejorar su situación económica mediante la intención espiritual.",
+        "categoria": "Magia Práctica",
+        "idioma": "Español",
+        "link": "https://mega.nz/file/aVMGyJIJ#x2nsMWUxh6FvrrNwt_E-IIKwjxryeIvOfPuxcbionDk",
+        "costo_correccion": 0.000061,
+        "costo_resumen": 0.000066,
+        "costo_total": 0.000127
+    },
+    {
+        "autor": "Movimiento Hexoriano",
+        "titulo": "Hechicería Urbana DKMU",
+        "resumen": "Una obra fundamental del colectivo DKMU sobre la magia en entornos modernos. Explora el uso de egrégores, sigilos y la transformación del paisaje urbano en un espacio sagrado y mágico.",
+        "categoria": "Magia Moderna / DKMU",
+        "idioma": "Español",
+        "link": "https://mega.nz/file/iEklwQQT#bcHvkbImwxfckU1DDwOsHoJvtyH4M4wfIApKdUWxeAs",
+        "costo_correccion": 0.000062,
+        "costo_resumen": 0.000067,
+        "costo_total": 0.000129
+    },
+    {
+        "autor": "Peter J. Carroll & Matt Kaybryn",
+        "titulo": "Epoch",
+        "resumen": "Carroll y Kaybryn presentan un sistema de adivinación y magia basado en el misticismo cuántico. 'Epoch' es un compendio visual y teórico para el mago del siglo XXI.",
+        "categoria": "Magia del Caos / Esoterismo",
+        "idioma": "Inglés",
+        "link": "https://mega.nz/file/jRdSVY5L#vpGO4tuBU2ih59Y9zoyAaXLVsNYU_WU_MLsHM3DToJg",
+        "costo_correccion": 0.000063,
+        "costo_resumen": 0.000068,
+        "costo_total": 0.000131
+    },
+    {
+        "autor": "Ahv Alen Essen Clauneck Kiar",
+        "titulo": "About the Author",
+        "resumen": "Perfil biográfico y filosófico de Clauneck Kiar, explorando su trayectoria en las artes oscuras y su conexión con entidades del inframundo y la magia financiera.",
+        "categoria": "Biografía / Ocultismo",
+        "idioma": "Inglés",
+        "link": "https://mega.nz/file/fV0xmYQK#JhHJUzO2HKx2Hy9B7U1g81PB55DYv2AT0GPIF022TpY",
+        "costo_correccion": 0.000059,
+        "costo_resumen": 0.000060,
+        "costo_total": 0.000119
+    },
+    {
+        "autor": "Desconocido",
+        "titulo": "AKHKHARU - Magia Vampírica",
+        "resumen": "Un manual dedicado a la senda del vampirismo energético y espiritual. Instrucciones sobre cómo cultivar el cuerpo de sombra y alcanzar la inmortalidad a través de la gnosis nocturna.",
+        "categoria": "Senda de la Mano Izquierda",
+        "idioma": "Español",
+        "link": "https://mega.nz/file/fBkQzYYB#Gagis2KyZOmW9G0KKaImvyuIMy6b0dfehIyqy5lvwPU",
+        "costo_correccion": 0.000064,
+        "costo_resumen": 0.000069,
+        "costo_total": 0.000133
+    },
+    {
+        "autor": "Desconocido",
+        "titulo": "Arabian Magic Compendium",
+        "resumen": "Vasto compendio sobre la magia árabe tradicional, incluyendo el uso de talismanes, invocaciones de genios y astrología semítica antigua.",
+        "categoria": "Magia Tradicional",
+        "idioma": "Inglés",
+        "link": "https://mega.nz/file/2UE33JpD#o3ikZJPngH7wlMiQ1t5AQS0m9y8ti2OvR5vcF0lCBUI",
+        "costo_correccion": 0.000065,
+        "costo_resumen": 0.000070,
+        "costo_total": 0.000135
+    },
+    {
+        "autor": "Desconocido",
+        "titulo": "Arabian Night",
+        "resumen": "Exploración de los mitos y leyendas del folclore árabe relacionados con lo sobrenatural y lo oculto, desde una perspectiva mística.",
+        "categoria": "Mitología / Ocultismo",
+        "idioma": "Inglés",
+        "link": "https://mega.nz/file/GV8VUIjK#vPKqk034XUnwWaGaKWWFhsdLR8DoyYSb6HGicy6G0Oo",
+        "costo_correccion": 0.000058,
+        "costo_resumen": 0.000062,
+        "costo_total": 0.000120
+    },
+    {
+        "autor": "Asociación Hispánica",
+        "titulo": "Congreso Internacional",
+        "resumen": "Actas del Congreso Internacional sobre esoterismo y ciencias ocultas, recopilando estudios académicos y prácticos de diversos ponentes.",
+        "categoria": "Investigación",
+        "idioma": "Español",
+        "link": "https://mega.nz/file/PREmDQqT#yScGImrTnsnowgBqlDkoa1FkiuA8H1SxUhLHF0Q1GTI",
+        "costo_correccion": 0.000066,
+        "costo_resumen": 0.000071,
+        "costo_total": 0.000137
+    },
+    {
+        "autor": "Desconocido",
+        "titulo": "Brigid: La Diosa Celta",
+        "resumen": "Estudio detallado sobre Brigid, la deidad celta de la poesía y la fragua. Incluye métodos de devoción y conexión con sus pozos sagrados.",
+        "categoria": "Celtismo / Paganismo",
+        "idioma": "Español",
+        "link": "https://mega.nz/file/6E0G1R6Y#QN07pcl6Ak2vURX4hdymUMDQxpjXvz3iRHuSQIJ1Tn8",
+        "costo_correccion": 0.000060,
+        "costo_resumen": 0.000064,
+        "costo_total": 0.000124
+    },
+    {
+        "autor": "Laura Tempest",
+        "titulo": "Brujería de los Sigilos",
+        "resumen": "Laura Tempest ofrece una visión artística y práctica sobre la creación de sigilos. Aprende a diseñar símbolos poderosos para manifestar cambios personales.",
+        "categoria": "Magia Práctica / Sigilos",
+        "idioma": "Español",
+        "link": "https://mega.nz/file/DV9xmCRT#UPma45bSFmlKfHD8RQaRIH_lx0sJHBOZtmQJwNBuEGg",
+        "costo_correccion": 0.000062,
+        "costo_resumen": 0.000067,
+        "costo_total": 0.000129
+    },
+    {
+        "autor": "CCRU",
+        "titulo": "Pandemonium",
+        "resumen": "Un texto vanguardista de la Cybernetic Culture Research Unit sobre hiperstición, demonología y la intersección entre la tecnología y lo oculto.",
+        "categoria": "Teoría Mágica / Hiperstición",
+        "idioma": "Inglés",
+        "link": "https://mega.nz/file/6Q00VQKA#fCeIQywal1-pXiYX71fhhYr7EumVKCQm6SOvu-yvuHc",
+        "costo_correccion": 0.000068,
+        "costo_resumen": 0.000072,
+        "costo_total": 0.000140
+    },
+    {
+        "autor": "Desconocido",
+        "titulo": "Códigos Sagrados Completos",
+        "resumen": "Guía completa para el uso de códigos numéricos sagrados como herramienta de sanación y manifestación espiritual.",
+        "categoria": "Espiritualidad",
+        "idioma": "Español",
+        "link": "https://mega.nz/file/iZVXkKyL#gVxdY9wnc-ijI9V-_dUsIoQ6nL26zfUU1ONz1PQulHc",
+        "costo_correccion": 0.000055,
+        "costo_resumen": 0.000060,
+        "costo_total": 0.000115
+    },
+    {
+        "autor": "Kerri Connor",
+        "titulo": "Conjuring with Cannabis",
+        "resumen": "Exploración del uso del cannabis en la práctica mágica y el ritual. Una guía para integrar la planta como sacramento y potenciador de la conciencia.",
+        "categoria": "Magia Herbolaria",
+        "idioma": "Inglés",
+        "link": "https://mega.nz/file/3UUmkICB#SWxxOl8D9I4cMhwm2_T_YJzD-VZYXV2nNXEDO9a2krA",
+        "costo_correccion": 0.000064,
+        "costo_resumen": 0.000069,
+        "costo_total": 0.000133
+    },
+    {
+        "autor": "Ahv Alen Essen Clauneck Kiar",
+        "titulo": "Crystal-gazing and Spiritual Clairvoyance",
+        "resumen": "Manual sobre la observación de cristales y el desarrollo de la clarividencia espiritual. Técnicas para abrir el tercer ojo y recibir visiones.",
+        "categoria": "Clarividencia",
+        "idioma": "Inglés",
+        "link": "https://mega.nz/file/iZ9H3BCL#UITFQbIiuNEp2vO4beDvc3Y42foWcw6hI9p8iwDK9Yc",
+        "costo_correccion": 0.000061,
+        "costo_resumen": 0.000065,
+        "costo_total": 0.000126
+    },
+    {
+        "autor": "John Kreiter",
+        "titulo": "Digital Sigil Magic",
+        "resumen": "John Kreiter adapta la antigua tradición de los sigilos a la era digital. Aprende a cargar y proyectar magia utilizando dispositivos electrónicos.",
+        "categoria": "Magia Moderna",
+        "idioma": "Inglés",
+        "link": "https://mega.nz/file/GFkGGBBZ#5yeuJyaSP_QBJVVQTxeifowl7hKHUURhHde0ijNA3-4",
+        "costo_correccion": 0.000063,
+        "costo_resumen": 0.000068,
+        "costo_total": 0.000131
+    },
+    {
+        "autor": "Dion",
+        "titulo": "Indo Aryan Magick",
+        "resumen": "Un estudio sobre las raíces indoeuropeas de la magia y su aplicación en los sistemas ocultos modernos.",
+        "categoria": "Ocultismo Comparado",
+        "idioma": "Inglés",
+        "link": "https://mega.nz/file/6csDDaSY#kYmXVf54LcB8lVTWNJlE_znLo1X4xtHb60Ebm7XVsHU",
+        "costo_correccion": 0.000065,
+        "costo_resumen": 0.000070,
+        "costo_total": 0.000135
+    },
+    {
+        "autor": "Desconocido",
+        "titulo": "Dionispán",
+        "resumen": "Texto esotérico sobre el culto a Dionisio y la integración de la energía pánica en los rituales de liberación espiritual.",
+        "categoria": "Ocultismo Clásico",
+        "idioma": "Español",
+        "link": "https://mega.nz/file/SFdH3DRS#_pQ92-zc3rku_iljJxGAvegbsS0MiNOjKwOHagtIs7o",
+        "costo_correccion": 0.000057,
+        "costo_resumen": 0.000061,
+        "costo_total": 0.000118
+    },
+    {
+        "autor": "Legran Alexandre",
+        "titulo": "Divulgations des Vrais Secrets",
+        "resumen": "Tratado antiguo sobre secretos herméticos y alquímicos rescatados de la tradición francesa clásica.",
+        "categoria": "Grimorios Clásicos",
+        "idioma": "Francés",
+        "link": "https://mega.nz/file/DcE3FRDQ#b0_ZyMt9QCZ8rcz1tzyJmKp2hkPATr0IS_wMH4MwJqM",
+        "costo_correccion": 0.000070,
+        "costo_resumen": 0.000075,
+        "costo_total": 0.000145
+    },
+    {
+        "autor": "Peter Carroll",
+        "titulo": "Entrevista con un Mago",
+        "resumen": "Una conversación profunda con Peter Carroll sobre la evolución de la Magia del Caos, la política y el futuro del ocultismo.",
+        "categoria": "Entrevistas / Teoría",
+        "idioma": "Español",
+        "link": "https://mega.nz/file/OBEW2Lqa#zFHgq9r1YmgggBvni5cCeRgthfQ82Z4M4tuK-wndZ0I",
+        "costo_correccion": 0.000060,
+        "costo_resumen": 0.000064,
+        "costo_total": 0.000124
+    },
+    {
+        "autor": "Marie French",
+        "titulo": "Inspiritu Jewelry",
+        "resumen": "Guía sobre la creación de joyería con intención mágica y la carga de amuletos portátiles.",
+        "categoria": "Magia Práctica / Arte",
+        "idioma": "Inglés",
+        "link": "https://mega.nz/file/CUV3gTja#QAv_2508MmNK0hpp3HClN4T9UiPcQxJv7UM0LsqVXT0",
+        "costo_correccion": 0.000059,
+        "costo_resumen": 0.000063,
+        "costo_total": 0.000122
+    },
+    {
+        "autor": "Ahv Alen Essen Clauneck Kiar",
+        "titulo": "Jengibre y sus usos sexuales mágicos",
+        "resumen": "Exploración de las propiedades afrodisíacas y mágicas del jengibre en contextos de BDSM y magia sexual.",
+        "categoria": "Magia Sexual",
+        "idioma": "Español",
+        "link": "https://mega.nz/file/rNFDlaTI#A53nWz74cmXAclqg1t7vX5OIwFxxC27OPl8GXCTE-B0",
+        "costo_correccion": 0.000062,
+        "costo_resumen": 0.000066,
+        "costo_total": 0.000128
+    },
+    {
+        "autor": "Desconocido",
+        "titulo": "Jinn Sorcery",
+        "resumen": "Manual avanzado sobre la invocación y el trabajo con los Jinn (Genios) según la tradición del medio oriente.",
+        "categoria": "Grimorios / Genios",
+        "idioma": "Inglés",
+        "link": "https://mega.nz/file/jZcHkKwC#ahMqOLBQDEB7h8VL_GT9BqtBHP4rSA_-lolk6bBc2n4",
+        "costo_correccion": 0.000065,
+        "costo_resumen": 0.000070,
+        "costo_total": 0.000135
+    },
+    {
+        "autor": "John Kreiter",
+        "titulo": "La Obra Magna",
+        "resumen": "Un curso paso a paso sobre el desarrollo de habilidades mágicas reales, desde la concentración hasta la manipulación de energía.",
+        "categoria": "Magia Práctica",
+        "idioma": "Español",
+        "link": "https://mega.nz/file/yFN0xDKT#bz4dDcLwOPcEiaQ8sPrNCKs-DT9wZBxlHGTB9pgwMzo",
+        "costo_correccion": 0.000064,
+        "costo_resumen": 0.000069,
+        "costo_total": 0.000133
+    },
+    {
+        "autor": "Kondratiev",
+        "titulo": "Rituales Celtas (1998)",
+        "resumen": "Reconstrucción histórica y práctica de las celebraciones y rituales de los antiguos pueblos celtas.",
+        "categoria": "Paganismo",
+        "idioma": "Español",
+        "link": "https://mega.nz/file/jF8G2aTZ#FnJNLmkeWO-wDIoBJ2IE66gTnLKuBoSRYhQqS4InKt4",
+        "costo_correccion": 0.000063,
+        "costo_resumen": 0.000068,
+        "costo_total": 0.000131
+    },
+    {
+        "autor": "Ray Ann Bucu",
+        "titulo": "Mystics Of Uranus",
+        "resumen": "Estudio astrológico y místico sobre la influencia de Urano en la espiritualidad moderna y los cambios revolucionarios.",
+        "categoria": "Astrología",
+        "idioma": "Inglés",
+        "link": "https://mega.nz/file/OElXmKLC#cWqA1x7BhSi4NyRtGrHkoRrP6VyLIOggPr7dBR9YQW8",
+        "costo_correccion": 0.000060,
+        "costo_resumen": 0.000064,
+        "costo_total": 0.000124
+    },
+    {
+        "autor": "Orbis Mystica",
+        "titulo": "The Neural Grimoire",
+        "resumen": "Un grimorio que explora la intersección entre la inteligencia artificial y la práctica mágica contemporánea.",
+        "categoria": "Tecnomagia",
+        "idioma": "Inglés",
+        "link": "https://mega.nz/file/uIMVjLwZ#7slj7ZB6QUp-xOhUarWlvQXMkz_Q4H0JMWGLeqAvsMw",
+        "costo_correccion": 0.000067,
+        "costo_resumen": 0.000072,
+        "costo_total": 0.000139
+    },
+    {
     "author": "Christopher Penczak",
     "title": "City Magick: Spells, Rituals, and Symbols for the Urban Witch",
     "summary": "City Magick: Spells, Rituals, and Symbols for the Urban Witch. This work challenges the belief that magic only resides in nature, revealing the magical potential and vital pulse of cities. The author, Christopher Penczak, offers a guide to modern urban shamanism, exploring metropolitan spirits, modern temples (including techno-temples), and the use of urban symbols like runes, helping practitioners recognize the sacred in the urban environment.",
@@ -14719,5 +15016,6 @@ const BIBLIOTECA_DATOS = [
     }
 
 ];
+
 
 
