@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const filtroIdioma = document.getElementById('filtro-idioma');
     const totalLibrosEl = document.getElementById('total-libros');
     let todosLosLibros = [];
+    let libros = null; // Declaramos 'libros' para evitar un ReferenceError si se comprueba su tipo en un bloque existente.
     let librosFiltradosActuales = [];
     let indiceLibrosMostrados = 0;
     const LIBROS_POR_PAGINA = 12; // Un número divisible por 2, 3 y 4 para un buen grid.
