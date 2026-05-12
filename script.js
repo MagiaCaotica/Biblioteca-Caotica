@@ -12,7 +12,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Usar los datos incrustados desde biblioteca_datos.js
     if (typeof BIBLIOTECA_DATOS !== 'undefined' && BIBLIOTECA_DATOS.length > 0) {
-        todosLosLibros = BIBLIOTECA_DATOS;
+        // Normalizamos los datos para asegurar que el buscador funcione con todas las entradas (ES/EN)
+        todosLosLibros = BIBLIOTECA_DATOS.map(l => ({
+            ...l,
+            titulo: l.titulo || l.title || "Tomo sin título",
+            autor: l.autor || l.author || "Autor Desconocido",
+            resumen: l.resumen || l.summary || "No hay resumen disponible.",
+            categoria: l.categoria || l.category || "Varios",
+            idioma: l.idioma || l.language || "No especificado",
+            link: l.link || l.url || "#"
+        }));
         popularIdiomas(todosLosLibros);
         popularCategorias(todosLosLibros);
         librosFiltradosActuales = [...todosLosLibros];
