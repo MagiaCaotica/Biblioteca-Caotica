@@ -170,8 +170,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const idiomaSeleccionado = filtroIdioma.value;
 
         librosFiltradosActuales = todosLosLibros.filter(libro => {
-            const coincideBusqueda = libro.titulo.toLowerCase().includes(textoBusqueda) || 
-                                     libro.autor.toLowerCase().includes(textoBusqueda);
+            const coincideBusqueda = (libro.titulo || "").toLowerCase().includes(textoBusqueda) || 
+                                     (libro.autor || "").toLowerCase().includes(textoBusqueda);
             
             const coincideCategoria = categoriaSeleccionada === 'todos' || libro.categoria === categoriaSeleccionada;
             const coincideIdioma = idiomaSeleccionado === 'todos' || libro.idioma === idiomaSeleccionado;
@@ -193,7 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Añadir los event listeners para la interactividad
-    buscador.addEventListener('keyup', filtrarLibros);
+    buscador.addEventListener('input', filtrarLibros);
     filtroCategoria.addEventListener('change', filtrarLibros);
     filtroIdioma.addEventListener('change', filtrarLibros);
 });
