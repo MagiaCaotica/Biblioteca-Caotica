@@ -3,13 +3,12 @@
    Cache-First Strategy | Offline Support | Performance
    ═══════════════════════════════════════════════════════════════════ */
 
-const CACHE_NAME = 'biblioteca-caotica-v2';
+const CACHE_NAME = 'biblioteca-caotica-v3';
 const ASSETS_TO_CACHE = [
     '/Biblioteca-Caotica/',
     '/Biblioteca-Caotica/index.html',
     '/Biblioteca-Caotica/style.css',
     '/Biblioteca-Caotica/script.js',
-    '/Biblioteca-Caotica/biblioteca_datos.js',
     '/Biblioteca-Caotica/manifest.json',
     '/Biblioteca-Caotica/tomo_placeholder.svg',
     '/Biblioteca-Caotica/404.html',
@@ -87,7 +86,17 @@ self.addEventListener('fetch', event => {
         return;
     }
 
-    // For our own assets: network-first, fallback to cache
+    // For biblioteca_datos.js: always network-first (changes frequently)
+    if (url.pathname.includes('biblioteca_datos')) {
+        event.respondWith(
+            fetch(event.request).then(response => {
+                const clone = response.clone();
+                caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
+                return response;
+            }).catch(() => caches.match(event.request))
+        );
+        return;
+    }
     event.respondWith(
         fetch(event.request).then(response => {
             const responseClone = response.clone();
