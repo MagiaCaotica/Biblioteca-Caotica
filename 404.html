@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 — Tomo Extraviado | Biblioteca Caótica Arcana</title>
+    <meta name="robots" content="noindex, follow">
+    <style>
+        :root {
+            --bg: #121212;
+            --surface: #1e1e1e;
+            --text: #e0e0e0;
+            --gold: #d4af37;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: Georgia, 'Times New Roman', serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 2rem;
+        }
+        .error-container {
+            max-width: 600px;
+            padding: 3rem;
+            background: var(--surface);
+            border: 1px solid #333;
+            border-radius: 8px;
+        }
+        .error-code {
+            font-size: clamp(4rem, 15vw, 8rem);
+            color: var(--gold);
+            font-family: 'Times New Roman', serif;
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
+            line-height: 1;
+        }
+        .error-title {
+            font-size: 1.5rem;
+            color: var(--gold);
+            margin: 1rem 0;
+        }
+        .error-message {
+            color: #a0a0a0;
+            font-style: italic;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        .btn-back {
+            display: inline-block;
+            color: var(--gold);
+            text-decoration: none;
+            padding: 0.7rem 1.5rem;
+            border: 1px solid var(--gold);
+            border-radius: 4px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .btn-back:hover {
+            background: var(--gold);
+            color: var(--bg);
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-code" aria-hidden="true">404</div>
+        <h1 class="error-title">Tomo Extraviado</h1>
+        <p class="error-message">
+            Este grimorio ha desaparecido del Akasha. Tal vez fue robado por un egregor rebelde,
+            quemado por la inquisición, o simplemente nunca existió.
+        </p>
+        <a href="https://magiacaotica.github.io/Biblioteca-Caotica/" class="btn-back">
+            ← Volver a la Biblioteca
+        </a>
+    </div>
+</body>
+</html>

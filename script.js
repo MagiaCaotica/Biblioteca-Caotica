@@ -1,77 +1,90 @@
+/* ═══════════════════════════════════════════════════════════════════
+   BIBLIOTECA CAÓTICA ARCANA — SCRIPT.JS
+   Infinite Scroll | Search | Filters | PDF Viewer | Structured Data
+   ═══════════════════════════════════════════════════════════════════ */
+
 document.addEventListener('DOMContentLoaded', () => {
+    // ── DOM References ─────────────────────────────────────────
     const estanteria = document.getElementById('estanteria');
     const buscador = document.getElementById('buscador');
     const filtroCategoria = document.getElementById('filtro-categoria');
     const filtroIdioma = document.getElementById('filtro-idioma');
     const totalLibrosEl = document.getElementById('total-libros');
+
+    // ── State ──────────────────────────────────────────────────
     let todosLosLibros = [];
-    let libros = null; // Declaramos 'libros' para evitar un ReferenceError si se comprueba su tipo en un bloque existente.
     let librosFiltradosActuales = [];
     let indiceLibrosMostrados = 0;
-    const LIBROS_POR_PAGINA = 12; // Un número divisible por 2, 3 y 4 para un buen grid.
+    const LIBROS_POR_PAGINA = 12;
     let estaCargando = false;
+    let observer = null;
 
-    // Usar los datos incrustados desde biblioteca_datos.js
+    // ── Data Loading ───────────────────────────────────────────
     if (typeof BIBLIOTECA_DATOS !== 'undefined' && BIBLIOTECA_DATOS.length > 0) {
-        // Normalizamos los datos para asegurar que el buscador funcione con todas las entradas (ES/EN)
         todosLosLibros = BIBLIOTECA_DATOS.map(l => ({
             ...l,
-            titulo: l.titulo || l.title || "Tomo sin título",
-            autor: l.autor || l.author || "Autor Desconocido",
-            resumen: l.resumen || l.summary || "No hay resumen disponible.",
-            categoria: l.categoria || l.category || "Varios",
-            idioma: l.idioma || l.language || "No especificado",
-            link: l.link || l.url || "#"
+            titulo: l.titulo || l.title || 'Tomo sin título',
+            autor: l.autor || l.author || 'Autor Desconocido',
+            resumen: l.resumen || l.summary || 'No hay resumen disponible.',
+            categoria: l.categoria || l.category || 'Varios',
+            idioma: l.idioma || l.language || 'No especificado',
+            link: l.link || l.url || '#'
         }));
+
         popularIdiomas(todosLosLibros);
         popularCategorias(todosLosLibros);
         librosFiltradosActuales = [...todosLosLibros];
         iniciarVista();
+        configurarIntersectionObserver();
+        actualizarMetaDescription(todosLosLibros.length);
     } else {
-        // Este mensaje solo aparecerá si biblioteca_datos.js no se carga o está vacío.
-        console.error('Error: La variable BIBLIOTECA_DATOS no está definida o está vacía.');
-        estanteria.innerHTML = '<p class="libro-placeholder">No se pudo cargar la biblioteca. El grimorio de datos podría estar corrupto o ausente.</p>';
+        console.error('[Biblioteca] La variable BIBLIOTECA_DATOS no está definida o está vacía.');
+        estanteria.innerHTML = '<div class="libro-placeholder" role="alert">No se pudo cargar la biblioteca. El grimorio de datos podría estar corrupto o ausente.</div>';
     }
 
-    /**
-     * Genera una cadena de texto con símbolos de aspecto ocultista.
-     * @returns {string} Una cadena de texto con símbolos aleatorios.
-     */
+    // ── Update Meta Description with Live Count ────────────────
+    function actualizarMetaDescription(total) {
+        const metaDesc = document.querySelector('meta[name="description"]');
+        if (metaDesc) {
+            metaDesc.setAttribute('content',
+                `Accede a la mayor colección gratuita de grimorios ocultistas en español: magia del caos, cábala, alquimia, tarot, wicca, hermetismo y más. +${total} libros esotéricos curados por Frater Alek0s. Descarga directa.`
+            );
+        }
+    }
+
+    // ── Mystic Symbols Generator ───────────────────────────────
     function generarSimbolosOcultos() {
-        const simbolos = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ⊕⊗⊘⊚⊛⊜⊝⊞⊟⊠⊡⋄⋇⋈⋉⋊⋋⋌⋍⋎⋏⋐⋑⋒⋓⋔⋕⋖⋗⋘⋙⋚⋛⋜⋝⋞⋟⋠⋡⋢⋣⋤⋥⋦⋧⋨⋩⋪⋫⋬⋭∴∵∷∸∹∺∻∼∽∾∿≀≁≂≃≄≅≆≇≈≉≊≋≌≍≎≏≐≑≒≓≔≕≖≗≘≙≚≛≜≝≞≟≠≡≢≤≥≦≧≨≩≪≫≬≭≮≯≰≱≲≳≴≵≶≷≸≹≺≻≼≽≾≿⊀⊁⊂⊃⊄⊅⊆⊇⊈⊉⊊⊋⊌⊍⊎⊏⊐⊑⊒⊓⊔";
+        const simbolos = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ⊕⊗⊘⊚⊛⊜⊝⊞⊟⊠⊡⋄⋇⋈⋉⋊⋋⋌⋍⋎⋏⋐⋑⋒⋓⋔⋕⋖⋗⋘⋙⋚⋛⋜⋝⋞⋟⋠⋡⋢⋣⋤⋥⋦⋧⋨⋩⋪⋫⋬⋭∴∵∷∸∹∺∻∼∽∾∿≀≁≂≃≄≅≆≇≈≉≊≋≌≍≎≏≐≑≒≓≔≕≖≗≘≙≚≛≜≝≞≟≠≡≢≤≥≦≧≨≩≪≫≬≭≮≯≰≱≲≳≴≵≶≷≸≹≺≻≼≽≾≿⊀⊁⊂⊃⊄⊅⊆⊇⊈⊉⊊⊋⊌⊍⊎⊏⊐⊑⊒⊓⊔';
         let resultado = '';
-        const cantidad = 150; // Reducimos la cantidad de símbolos para que quepan mejor
+        const cantidad = 130;
         for (let i = 0; i < cantidad; i++) {
             resultado += simbolos.charAt(Math.floor(Math.random() * simbolos.length));
-            if (Math.random() > 0.95) {
-                resultado += '<br>'; // Añade saltos de línea aleatorios
-            }
+            if (Math.random() > 0.94) resultado += '<br>';
         }
         return resultado;
     }
 
-    /**
-     * Crea un enlace de AdFoc.us a partir de una URL de destino.
-     * @param {string} urlDestino La URL original (ej. el enlace de Mega).
-     * @returns {string} La URL de AdFoc.us formateada.
-     */
+    // ── AdFoc.us Link Builder ──────────────────────────────────
     function crearLinkAdfocus(urlDestino) {
         const idUsuarioAdfocus = 757448;
-        // El carácter '#' en la URL de Mega debe ser codificado como '%23' para que se pase
-        // correctamente como parte del parámetro 'url' a AdFoc.us. De lo contrario, el navegador
-        // lo interpreta como un ancla y no lo envía al servidor.
         const urlParaAdfocus = urlDestino.replace('#', '%23');
         return `https://adfoc.us/serve/sitelinks/?id=${idUsuarioAdfocus}&url=${urlParaAdfocus}`;
     }
 
-    // Función para mostrar los libros en la página
+    // ── Detect if link is a direct PDF ─────────────────────────
+    function esPDFDirecto(url) {
+        return /\.pdf(\?.*)?$/i.test(url) && !url.includes('mega.nz');
+    }
+
+    // ── Render Books ───────────────────────────────────────────
     function mostrarLibros() {
         estaCargando = true;
         const fin = indiceLibrosMostrados + LIBROS_POR_PAGINA;
         const loteLibros = librosFiltradosActuales.slice(indiceLibrosMostrados, fin);
+        const fragment = document.createDocumentFragment();
 
         if (indiceLibrosMostrados === 0 && loteLibros.length === 0) {
-            estanteria.innerHTML = '<p class="libro-placeholder">Ningún tomo coincide con la consulta arcana.</p>';
+            estanteria.innerHTML = '<div class="libro-placeholder" role="status">Ningún tomo coincide con la consulta arcana.</div>';
             estaCargando = false;
             return;
         }
@@ -79,65 +92,97 @@ document.addEventListener('DOMContentLoaded', () => {
         loteLibros.forEach(libro => {
             const divLibro = document.createElement('div');
             divLibro.className = 'libro';
-            
+            divLibro.setAttribute('role', 'article');
+            divLibro.setAttribute('aria-labelledby', `titulo-${sanitizeId(libro.titulo)}`);
+
+            const linkAdfocus = crearLinkAdfocus(libro.link);
+            const simbolos = generarSimbolosOcultos();
+            const tituloId = `titulo-${sanitizeId(libro.titulo)}`;
+
             divLibro.innerHTML = `
-                <a href="${crearLinkAdfocus(libro.link)}" target="_blank" rel="noopener noreferrer" class="preview-container" title="Acceder al contenido de: ${libro.titulo}">
-                    <div class="symbol-preview">${generarSimbolosOcultos()}</div>
-                    <div class="preview-overlay"><span>Ver Contenido</span>
-                    </div>
+                <a href="${linkAdfocus}" target="_blank" rel="noopener noreferrer"
+                   class="preview-container"
+                   title="Acceder al contenido de: ${escapeAttr(libro.titulo)}"
+                   aria-label="Ver contenido de ${escapeAttr(libro.titulo)}">
+                    <div class="symbol-preview" aria-hidden="true">${simbolos}</div>
+                    <div class="preview-overlay"><span>Ver Contenido</span></div>
                 </a>
-                <h3>${libro.titulo}</h3>
-                <p class="autor">Por: ${libro.autor}</p>
-                <p class="resumen">${libro.resumen || 'No hay resumen disponible.'}</p>
-                <p class="categoria">${libro.categoria}</p>
+                <h3 id="${tituloId}">${escapeHTML(libro.titulo)}</h3>
+                <p class="autor">Por: ${escapeHTML(libro.autor)}</p>
+                <p class="resumen">${escapeHTML(libro.resumen || 'No hay resumen disponible.')}</p>
+                <span class="categoria">${escapeHTML(libro.categoria)}</span>
                 <div class="libro-meta">
-                    <p class="idioma">Idioma: ${libro.idioma || 'No especificado'}</p>
+                    <span class="idioma">Idioma: ${escapeHTML(libro.idioma || 'No especificado')}</span>
                 </div>
                 <div class="libro-acciones">
-                    <a href="${crearLinkAdfocus(libro.link)}" target="_blank" rel="noopener noreferrer" class="boton-principal">Descargar Tomo</a>
+                    <a href="${linkAdfocus}" target="_blank" rel="noopener noreferrer"
+                       class="boton-principal"
+                       aria-label="Descargar ${escapeAttr(libro.titulo)}">Descargar Tomo</a>
                     <div class="botones-compartir">
-                        <a href="https://twitter.com/intent/tweet?text=He%20encontrado%20el%20tomo%20'${encodeURIComponent(libro.titulo)}'%20en%20la%20Biblioteca%20Ocultista:&url=${encodeURIComponent('https://magiacaotica.github.io/Biblioteca-Caotica/')}" target="_blank" rel="noopener noreferrer" class="boton-compartir" title="Compartir en X/Twitter">X</a>
-                        <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent('https://magiacaotica.github.io/Biblioteca-Caotica/')}&quote=He%20encontrado%20el%20tomo%20'${encodeURIComponent(libro.titulo)}'%20en%20la%20Biblioteca%20Ocultista" target="_blank" rel="noopener noreferrer" class="boton-compartir" title="Compartir en Facebook">f</a>
-                        <a href="https://api.whatsapp.com/send?text=He%20encontrado%20el%20tomo%20'${encodeURIComponent(libro.titulo)}'%20en%20la%20Biblioteca%20Ocultista:%20${encodeURIComponent('https://magiacaotica.github.io/Biblioteca-Caotica/')}" target="_blank" rel="noopener noreferrer" class="boton-compartir" title="Compartir en WhatsApp">✆</a>
+                        <a href="https://twitter.com/intent/tweet?text=${encodeURIComponent('He encontrado el tomo \'' + libro.titulo + '\' en la Biblioteca Ocultista:')}&url=${encodeURIComponent('https://magiacaotica.github.io/Biblioteca-Caotica/')}"
+                           target="_blank" rel="noopener noreferrer"
+                           class="boton-compartir"
+                           title="Compartir en X/Twitter"
+                           aria-label="Compartir ${escapeAttr(libro.titulo)} en X/Twitter">X</a>
+                        <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent('https://magiacaotica.github.io/Biblioteca-Caotica/')}&quote=${encodeURIComponent('He encontrado el tomo \'' + libro.titulo + '\' en la Biblioteca Ocultista')}"
+                           target="_blank" rel="noopener noreferrer"
+                           class="boton-compartir"
+                           title="Compartir en Facebook"
+                           aria-label="Compartir ${escapeAttr(libro.titulo)} en Facebook">f</a>
+                        <a href="https://api.whatsapp.com/send?text=${encodeURIComponent('He encontrado el tomo \'' + libro.titulo + '\' en la Biblioteca Ocultista: https://magiacaotica.github.io/Biblioteca-Caotica/')}"
+                           target="_blank" rel="noopener noreferrer"
+                           class="boton-compartir"
+                           title="Compartir en WhatsApp"
+                           aria-label="Compartir ${escapeAttr(libro.titulo)} en WhatsApp">✆</a>
                     </div>
                 </div>
             `;
-            estanteria.appendChild(divLibro);
+
+            fragment.appendChild(divLibro);
         });
 
+        estanteria.appendChild(fragment);
         indiceLibrosMostrados = fin;
         estaCargando = false;
     }
 
-    function copiarAlPortapapeles(texto) {
-        navigator.clipboard.writeText(texto).then(() => {
-            alert('¡Enlace copiado al portapapeles!');
-        }, (err) => {
-            console.error('Error al copiar el texto: ', err);
-            alert('No se pudo copiar el enlace.');
-        });
+    // ── Helper: Sanitize HTML ──────────────────────────────────
+    function escapeHTML(str) {
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
     }
 
-    // Inicia o reinicia la vista de la biblioteca
+    function escapeAttr(str) {
+        return str.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    function sanitizeId(str) {
+        return str.replace(/[^a-zA-Z0-9\u00C0-\u024F\-_]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '').toLowerCase() || 'tomo';
+    }
+
+    // ── Init / Reset View ──────────────────────────────────────
     function iniciarVista() {
         indiceLibrosMostrados = 0;
         estanteria.innerHTML = '';
         totalLibrosEl.textContent = `${librosFiltradosActuales.length} tomos encontrados.`;
-        
-        // Ya no necesitamos el IntersectionObserver para esta solución
+
+        if (librosFiltradosActuales.length === 0) {
+            estanteria.innerHTML = '<div class="libro-placeholder" role="status">Ningún tomo coincide con la consulta arcana. Prueba con otros términos o filtros.</div>';
+            return;
+        }
+
         mostrarLibros();
     }
 
-    // Función para llenar el selector de categorías
+    // ── Populate Category Dropdown ─────────────────────────────
     function popularCategorias(libros) {
         const categorias = new Set();
         libros.forEach(libro => {
-            if (libro.categoria) {
-                categorias.add(libro.categoria);
-            }
+            if (libro.categoria) categorias.add(libro.categoria);
         });
 
-        const categoriasOrdenadas = Array.from(categorias).sort();
+        const categoriasOrdenadas = Array.from(categorias).sort((a, b) => a.localeCompare(b, 'es'));
         categoriasOrdenadas.forEach(cat => {
             const option = document.createElement('option');
             option.value = cat;
@@ -146,16 +191,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Función para llenar el selector de idiomas
+    // ── Populate Language Dropdown ─────────────────────────────
     function popularIdiomas(libros) {
         const idiomas = new Set();
         libros.forEach(libro => {
-            if (libro.idioma) {
-                idiomas.add(libro.idioma);
-            }
+            if (libro.idioma) idiomas.add(libro.idioma);
         });
 
-        const idiomasOrdenados = Array.from(idiomas).sort();
+        const idiomasOrdenados = Array.from(idiomas).sort((a, b) => a.localeCompare(b, 'es'));
         idiomasOrdenados.forEach(idioma => {
             const option = document.createElement('option');
             option.value = idioma;
@@ -164,37 +207,88 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Función para filtrar y buscar
+    // ── Filter & Search ────────────────────────────────────────
     function filtrarLibros() {
         const textoBusqueda = buscador.value.toLowerCase().trim();
         const categoriaSeleccionada = filtroCategoria.value;
         const idiomaSeleccionado = filtroIdioma.value;
 
         librosFiltradosActuales = todosLosLibros.filter(libro => {
-            const coincideBusqueda = (libro.titulo || "").toLowerCase().includes(textoBusqueda) || 
-                                     (libro.autor || "").toLowerCase().includes(textoBusqueda);
-            
+            const coincideBusqueda = !textoBusqueda ||
+                (libro.titulo || '').toLowerCase().includes(textoBusqueda) ||
+                (libro.autor || '').toLowerCase().includes(textoBusqueda) ||
+                (libro.resumen || '').toLowerCase().includes(textoBusqueda);
+
             const coincideCategoria = categoriaSeleccionada === 'todos' || libro.categoria === categoriaSeleccionada;
             const coincideIdioma = idiomaSeleccionado === 'todos' || libro.idioma === idiomaSeleccionado;
+
             return coincideBusqueda && coincideCategoria && coincideIdioma;
         });
+
         iniciarVista();
     }
 
-    // Evento de scroll para el "scroll infinito"
-    window.addEventListener('scroll', () => {
-        // Condición para cargar más:
-        // 1. No estar ya cargando.
-        // 2. Haber más libros por mostrar.
-        // 3. Estar cerca del final de la página (a 500px del final).
-        if (!estaCargando && indiceLibrosMostrados < librosFiltradosActuales.length &&
-            (window.innerHeight + window.scrollY) >= document.body.offsetHeight - 500) {
-            mostrarLibros();
+    // Debounce search for performance
+    let debounceTimer;
+    function filtrarLibrosDebounced() {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(filtrarLibros, 250);
+    }
+
+    // ── Intersection Observer (Infinite Scroll) ────────────────
+    function configurarIntersectionObserver() {
+        if ('IntersectionObserver' in window) {
+            // Crear un elemento centinela al final
+            const sentinel = document.createElement('div');
+            sentinel.id = 'scroll-sentinel';
+            sentinel.style.height = '1px';
+            sentinel.style.width = '100%';
+            sentinel.setAttribute('aria-hidden', 'true');
+            document.querySelector('main').appendChild(sentinel);
+
+            observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && !estaCargando && indiceLibrosMostrados < librosFiltradosActuales.length) {
+                        mostrarLibros();
+                    }
+                });
+            }, {
+                rootMargin: '400px' // Preload 400px before reaching the end
+            });
+
+            observer.observe(sentinel);
+        } else {
+            // Fallback: scroll event
+            let scrollTicking = false;
+            window.addEventListener('scroll', () => {
+                if (!scrollTicking) {
+                    requestAnimationFrame(() => {
+                        if (!estaCargando &&
+                            indiceLibrosMostrados < librosFiltradosActuales.length &&
+                            (window.innerHeight + window.scrollY) >= document.body.offsetHeight - 600) {
+                            mostrarLibros();
+                        }
+                        scrollTicking = false;
+                    });
+                    scrollTicking = true;
+                }
+            }, { passive: true });
+        }
+    }
+
+    // ── Event Listeners ────────────────────────────────────────
+    buscador.addEventListener('input', filtrarLibrosDebounced);
+    filtroCategoria.addEventListener('change', filtrarLibros);
+    filtroIdioma.addEventListener('change', filtrarLibros);
+
+    // Keyboard shortcut: Ctrl+K or / to focus search
+    document.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey && e.key === 'k') || (e.key === '/' && document.activeElement === document.body)) {
+            e.preventDefault();
+            buscador.focus();
         }
     });
 
-    // Añadir los event listeners para la interactividad
-    buscador.addEventListener('input', filtrarLibros);
-    filtroCategoria.addEventListener('change', filtrarLibros);
-    filtroIdioma.addEventListener('change', filtrarLibros);
+    // ── Log ────────────────────────────────────────────────────
+    console.log(`[Biblioteca Caótica Arcana] ${todosLosLibros.length} tomos indexados. Listo para servir sabiduría. 🕯️`);
 });

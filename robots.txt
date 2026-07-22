@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+Disallow: /leer.html
+
+# Sitemaps
+Sitemap: https://magiacaotica.github.io/Biblioteca-Caotica/sitemap.xml
+
+# Crawl-delay: respetuoso con GitHub Pages
+Crawl-delay: 10
+
+# Host
+Host: https://magiacaotica.github.io
