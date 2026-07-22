@@ -457,7 +457,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function escapeAttr(str) {
-        return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/`/g, '&#96;');
     }
 
     function sanitizeId(str) {
