@@ -487,4 +487,25 @@ document.addEventListener('DOMContentLoaded', () => {
     // ── Log ────────────────────────────────────────────────────
     const librosConMega = todosLosLibros.filter(l => l.link && l.link.includes('mega.nz')).length;
     console.log(`[Biblioteca Caótica Arcana] ${todosLosLibros.length} tomos indexados · ${librosConMega} con previsualización Mega.nz · Listo 🕯️`);
+
+    // ── Contador de visitas (localStorage) ──────────────────────
+    function actualizarContador() {
+        const el = document.getElementById('contador-numero');
+        if (!el) return;
+
+        // Leer contador actual
+        let count = parseInt(localStorage.getItem('biblio_visitas') || '0', 10);
+
+        // Incrementar solo una vez por sesión
+        const sesionId = sessionStorage.getItem('biblio_sesion');
+        if (!sesionId) {
+            count++;
+            localStorage.setItem('biblio_visitas', count.toString());
+            sessionStorage.setItem('biblio_sesion', Date.now().toString());
+        }
+
+        // Formatear número
+        el.textContent = count.toLocaleString('es');
+    }
+    actualizarContador();
 });
