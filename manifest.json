@@ -1,13 +1,13 @@
 {
     "name": "Biblioteca Ocultista Arcana Caótica",
     "short_name": "Biblio Caótica",
-    "description": "La mayor colección gratuita de grimorios ocultistas: magia del caos, cábala, alquimia, tarot, hermetismo. +1,300 libros esotéricos curados por Frater Alek0s.",
+    "description": "La mayor colección gratuita de grimorios ocultistas: magia del caos, cábala, alquimia, tarot, hermetismo. +1,500 libros esotéricos curados por Frater Alek0s.",
     "start_url": "https://magiacaotica.github.io/Biblioteca-Caotica/",
     "scope": "https://magiacaotica.github.io/Biblioteca-Caotica/",
     "display": "standalone",
     "orientation": "any",
-    "background_color": "#121212",
-    "theme_color": "#121212",
+    "background_color": "#18130e",
+    "theme_color": "#18130e",
     "lang": "es",
     "categories": ["books", "education", "reference"],
     "icons": [
