@@ -11,13 +11,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const filtroIdioma = document.getElementById('filtro-idioma');
     const totalLibrosEl = document.getElementById('total-libros');
     const modalOverlay = document.getElementById('modal-preview');
-    const modalIframe = document.getElementById('modal-iframe');
     const modalTitle = document.getElementById('modal-title');
+    const modalBookName = document.getElementById('modal-book-name');
     const modalClose = document.getElementById('modal-close');
-    const modalLoading = document.getElementById('modal-loading');
-    const modalError = document.getElementById('modal-error');
+    const modalBtnClose = document.getElementById('modal-btn-close');
     const modalDownload = document.getElementById('modal-download');
-    const modalDirectLink = document.getElementById('modal-direct-link');
+    const modalBlocked = document.getElementById('modal-blocked');
+    const modalFallback = document.getElementById('modal-fallback');
 
     // ── State ──────────────────────────────────────────────────
     let todosLosLibros = [];
@@ -162,63 +162,54 @@ document.addEventListener('DOMContentLoaded', () => {
         return `https://adfoc.us/serve/sitelinks/?id=${idUsuarioAdfocus}&url=${urlParaAdfocus}`;
     }
 
-    // ── Modal: Embed de Mega.nz en iframe limpio ───────────────
-    let modalTimeout = null;
+    // ── Modal: Abre previsualización de Mega en pestaña nueva ──
+    //      El iframe inline es imposible: Mega detecta window.top !==
+    //      window.self en su JS y bloquea el renderizado del contenido.
+    let autoCloseTimer = null;
 
     function abrirModal(titulo, embedUrl, linkDescarga) {
-        // Resetear estado
-        clearTimeout(modalTimeout);
-        modalTitle.textContent = titulo;
-        modalIframe.style.display = 'none';
-        modalIframe.src = '';
-        modalLoading.style.display = 'block';
-        modalError.style.display = 'none';
+        clearTimeout(autoCloseTimer);
+        modalTitle.textContent = 'Abriendo previsualización...';
+        modalBookName.textContent = titulo;
         modalDownload.href = linkDescarga;
-        modalDirectLink.href = embedUrl;
+        modalFallback.href = embedUrl;
+        modalBlocked.style.display = 'none';
         modalOverlay.hidden = false;
         document.body.style.overflow = 'hidden';
 
-        // Cargar iframe limpio — sin sandbox, sin referrerpolicy, sin lazy
-        modalIframe.src = embedUrl;
+        // Abrir Mega embed en pestaña nueva
+        const popup = window.open(embedUrl, '_blank', 'noopener,noreferrer');
 
-        // Detectar cuando el iframe terminó de cargar
-        modalIframe.onload = () => {
-            clearTimeout(modalTimeout);
-            modalLoading.style.display = 'none';
-            modalIframe.style.display = 'block';
-            modalError.style.display = 'none';
-        };
-
-        // Timeout de respeto: 20s. Si Mega no respondió, mostrar fallback
-        modalTimeout = setTimeout(() => {
-            if (modalIframe.style.display === 'none') {
-                modalLoading.style.display = 'none';
-                modalError.style.display = 'block';
-            }
-        }, 20000);
+        if (!popup || popup.closed || typeof popup.closed === 'undefined') {
+            // Popup bloqueado por el navegador
+            modalBlocked.style.display = 'block';
+            modalTitle.textContent = 'Previsualización bloqueada';
+        } else {
+            // Éxito: la pestaña se abrió — cerrar modal en 1.2s
+            modalTitle.textContent = '¡Previsualización abierta!';
+            autoCloseTimer = setTimeout(() => {
+                if (!modalOverlay.hidden) cerrarModal();
+            }, 1200);
+        }
 
         modalClose.focus();
     }
 
     function cerrarModal() {
-        clearTimeout(modalTimeout);
+        clearTimeout(autoCloseTimer);
         modalOverlay.hidden = true;
-        modalIframe.src = '';
         document.body.style.overflow = '';
     }
 
     modalClose.addEventListener('click', cerrarModal);
+    modalBtnClose.addEventListener('click', cerrarModal);
 
     modalOverlay.addEventListener('click', (e) => {
-        if (e.target === modalOverlay) {
-            cerrarModal();
-        }
+        if (e.target === modalOverlay) cerrarModal();
     });
 
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && !modalOverlay.hidden) {
-            cerrarModal();
-        }
+        if (e.key === 'Escape' && !modalOverlay.hidden) cerrarModal();
     });
 
     // ── Render Books ───────────────────────────────────────────
