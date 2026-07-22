@@ -276,32 +276,23 @@
     <script type="module" id="pdfjs-loader" data-src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.7.76/pdf.min.mjs"></script>
 
     <!-- ═══════════════════════════════════════════ -->
-    <!-- MODAL DE PREVISUALIZACIÓN — Estrategia dual -->
-    <!-- 1. <object> (modelo de seguridad distinto) -->
-    <!-- 2. <iframe> (fallback sin sandbox)         -->
-    <!-- 3. window.open (fallback final)            -->
+    <!-- MODAL — Embed INLINE de Mega               -->
     <!-- ═══════════════════════════════════════════ -->
     <div id="modal-preview" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" hidden>
         <div class="modal-container modal-embed">
             <div class="modal-header">
-                <h2 id="modal-title" class="modal-title">Cargando previsualización...</h2>
+                <h2 id="modal-title" class="modal-title">Consultando tomo...</h2>
                 <button id="modal-close" class="modal-close" aria-label="Cerrar">&times;</button>
             </div>
             <div class="modal-body">
-                <!-- Estado: cargando / abriendo -->
-                <div id="modal-loading" class="modal-loading" role="status">
-                    <div class="loading-spinner" aria-hidden="true"></div>
-                    <p>Abriendo <strong id="modal-book-name">el tomo</strong> en Mega.nz...</p>
-                    <p class="modal-info-hint" style="margin-top:0.5rem;">La previsualización se abrirá en una pestaña nueva.</p>
-                </div>
-                <!-- Estado: popup bloqueado -->
-                <div id="modal-fallback" class="modal-fallback" style="display:none;">
-                    <p class="modal-warning">⚠️ El navegador bloqueó la apertura automática.</p>
-                    <p class="modal-info-hint">Usa el botón de abajo para descargar el archivo directamente.</p>
-                    <div style="margin-top:1rem; display:flex; gap:0.7rem; justify-content:center;">
-                        <a id="modal-download" href="#" target="_blank" rel="noopener noreferrer" class="boton-principal">⬇ Descargar Tomo</a>
-                    </div>
-                </div>
+                <iframe id="modal-iframe"
+                        title="Visor de documento"
+                        allow="fullscreen"
+                        style="width:100%; height:100%; min-height:500px; border:none; background:#0d0a07;">
+                </iframe>
+            </div>
+            <div class="modal-footer">
+                <a id="modal-download" href="#" target="_blank" rel="noopener noreferrer" class="boton-principal">⬇ Descargar Tomo</a>
             </div>
         </div>
     </div>
