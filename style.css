@@ -275,6 +275,14 @@ header .subtitulo {
     max-width: 650px;
     letter-spacing: 0.5px;
 }
+.labs-link {
+    color: var(--color-primario);
+    text-decoration: none;
+    font-weight: 600;
+    font-style: normal;
+    transition: color var(--transicion-media);
+}
+.labs-link:hover { color: var(--color-primario-hover); text-decoration: underline; }
 
 /* Enlaces comunidad */
 .enlaces-comunidad {
@@ -742,6 +750,18 @@ main {
     padding: var(--espaciado-xl);
 }
 .modal-loading p { margin-top: var(--espaciado-md); font-style: italic; }
+
+/* Barra de progreso de descarga */
+#modal-progress {
+    width: 200px; height: 4px;
+    margin-top: 0.8rem;
+    appearance: none; -webkit-appearance: none;
+    border-radius: 2px; overflow: hidden;
+    background: var(--color-borde);
+}
+#modal-progress::-webkit-progress-bar { background: var(--color-borde); border-radius: 2px; }
+#modal-progress::-webkit-progress-value { background: var(--color-primario); border-radius: 2px; transition: width 0.3s; }
+#modal-progress::-moz-progress-bar { background: var(--color-primario); border-radius: 2px; }
 
 .modal-fallback {
     text-align: center; padding: var(--espaciado-xl); max-width: 420px;

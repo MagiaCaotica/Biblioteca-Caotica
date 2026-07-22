@@ -20,6 +20,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalFallback = document.getElementById('modal-fallback');
     const modalDownload = document.getElementById('modal-download');
     const modalDirectLink = document.getElementById('modal-direct-link');
+    const modalProgress = document.getElementById('modal-progress');
+    const modalPdfViewer = document.getElementById('modal-pdf-viewer');
+    const modalPdfCanvas = document.getElementById('modal-pdf-canvas');
+    const pdfPrev = document.getElementById('pdf-prev');
+    const pdfNext = document.getElementById('pdf-next');
+    const pdfPageInfo = document.getElementById('pdf-page-info');
 
     // ── State ──────────────────────────────────────────────────
     let todosLosLibros = [];
@@ -164,144 +170,164 @@ document.addEventListener('DOMContentLoaded', () => {
         return `https://adfoc.us/serve/sitelinks/?id=${idUsuarioAdfocus}&url=${urlParaAdfocus}`;
     }
 
-    // ── Modal: Embed inline de Mega con estrategia dual ─────────
-    //      1. <object> → contexto de seguridad distinto al iframe
-    //      2. <iframe> → fallback sin sandbox ni restricciones
-    //      3. Fallback → botones para abrir en pestaña nueva
+    // ── Modal: Render INLINE REAL con MegaClient + PDF.js ───────
+    //      Descarga y descifra el PDF desde Mega, luego renderiza
+    //      con PDF.js directamente en el modal. Sin iframe.
     let modalTimeout = null;
-    let embedStrategy = 0; // 0=object, 1=iframe, 2=fallback
+    let pdfDoc = null;
+    let pdfPageNum = 1;
+    let pdfTotalPages = 0;
 
-    function abrirModal(titulo, embedUrl, linkDescarga) {
-        // Reset
+    function resetModal() {
         clearTimeout(modalTimeout);
-        embedStrategy = 0;
-        modalTitle.textContent = titulo;
-        modalBookName.textContent = titulo;
-        modalObject.style.display = 'none';
-        modalObject.data = '';
-        modalIframe.style.display = 'none';
-        modalIframe.src = '';
+        modalObject.style.display = 'none'; modalObject.data = '';
+        modalIframe.style.display = 'none'; modalIframe.src = '';
+        modalPdfViewer.style.display = 'none';
         modalLoading.style.display = 'block';
         modalFallback.style.display = 'none';
+        modalProgress.style.display = 'none';
+        modalProgress.value = 0;
+        pdfDoc = null; pdfPageNum = 1; pdfTotalPages = 0;
+    }
+
+    async function abrirModal(titulo, embedUrl, linkDescarga, linkMegaDirecto) {
+        resetModal();
+        modalTitle.textContent = titulo;
+        modalBookName.textContent = titulo;
         modalDownload.href = linkDescarga;
         modalDirectLink.href = embedUrl;
         modalOverlay.hidden = false;
         document.body.style.overflow = 'hidden';
-
-        // ── ESTRATEGIA 1: Probar <object> ──────────────────────
-        // <object> tiene un modelo de seguridad diferente al iframe.
-        // Puede que Mega no detecte window.top !== window.self aquí.
-        tryObject(embedUrl);
-
-        // Timeout global: 15 segundos máximo para todo
-        modalTimeout = setTimeout(() => {
-            if (embedStrategy < 2) {
-                // Object falló → probar iframe
-                if (embedStrategy === 0) {
-                    tryIframe(embedUrl);
-                }
-                // Si ya probamos iframe y también falló → fallback
-                if (embedStrategy === 1) {
-                    showFallback();
-                }
-            }
-        }, 15000);
-
         modalClose.focus();
-    }
 
-    function tryObject(url) {
-        embedStrategy = 0;
-        modalObject.style.display = 'none';
-        modalIframe.style.display = 'none';
-        modalLoading.style.display = 'block';
-        modalFallback.style.display = 'none';
+        // Intentar render INLINE REAL con MegaClient
+        if (typeof MegaClient !== 'undefined' && linkMegaDirecto) {
+            modalProgress.style.display = 'block';
+            try {
+                const result = await MegaClient.download(linkMegaDirecto, (pct) => {
+                    modalProgress.value = pct;
+                });
+                
+                // ¡Descargado y descifrado! Renderizar con PDF.js
+                await renderPDF(result.blob, titulo);
+                return;
+            } catch (e) {
+                console.warn('[Modal] MegaClient falló:', e.message);
+                // Caer a estrategia object/iframe
+            }
+        }
 
-        // El <object> se carga con data=
-        modalObject.data = url;
-
-        // Timeout para el object: 6 segundos
-        const objectTimeout = setTimeout(() => {
-            if (embedStrategy === 0) {
-                // Object no cargó a tiempo → probar iframe
-                tryIframe(url);
+        // Fallback: intentar object → iframe → fallback links
+        tryObject(embedUrl);
+        modalTimeout = setTimeout(() => {
+            if (modalFallback.style.display === 'none' && modalPdfViewer.style.display === 'none') {
+                tryIframe(embedUrl);
+                setTimeout(() => {
+                    if (modalFallback.style.display === 'none' && modalPdfViewer.style.display === 'none') {
+                        showFallback();
+                    }
+                }, 8000);
             }
         }, 6000);
-
-        modalObject.onload = () => {
-            clearTimeout(objectTimeout);
-            if (embedStrategy === 0) {
-                // ¡Object cargó! Verificar si tiene contenido
-                modalLoading.style.display = 'none';
-                modalObject.style.display = 'block';
-                modalIframe.style.display = 'none';
-                modalFallback.style.display = 'none';
-                embedStrategy = 999; // Éxito
-                clearTimeout(modalTimeout);
-            }
-        };
-
-        modalObject.onerror = () => {
-            clearTimeout(objectTimeout);
-            if (embedStrategy === 0) {
-                tryIframe(url);
-            }
-        };
     }
 
-    function tryIframe(url) {
-        embedStrategy = 1;
-        modalObject.style.display = 'none';
-        modalObject.data = '';
-        modalIframe.style.display = 'none';
-        modalLoading.style.display = 'block';
-        modalFallback.style.display = 'none';
-
-        // Iframe limpio: sin sandbox, sin restricciones
-        modalIframe.src = url;
-
-        const iframeTimeout = setTimeout(() => {
-            if (embedStrategy === 1) {
-                showFallback();
-            }
-        }, 8000);
-
-        modalIframe.onload = () => {
-            clearTimeout(iframeTimeout);
-            if (embedStrategy === 1) {
-                modalLoading.style.display = 'none';
-                modalIframe.style.display = 'block';
-                modalFallback.style.display = 'none';
-                embedStrategy = 999; // Éxito
-                clearTimeout(modalTimeout);
-            }
-        };
-
-        modalIframe.onerror = () => {
-            clearTimeout(iframeTimeout);
-            if (embedStrategy === 1) {
-                showFallback();
-            }
-        };
-    }
-
-    function showFallback() {
-        embedStrategy = 2;
-        modalObject.style.display = 'none';
-        modalObject.data = '';
-        modalIframe.style.display = 'none';
-        modalIframe.src = '';
+    // ── PDF.js Render ──────────────────────────────────────────
+    async function renderPDF(blob, titulo) {
+        modalTitle.textContent = titulo;
         modalLoading.style.display = 'none';
+        modalObject.style.display = 'none';
+        modalIframe.style.display = 'none';
+        modalFallback.style.display = 'none';
+        modalPdfViewer.style.display = 'flex';
+
+        try {
+            // Cargar PDF.js dinámicamente si no está disponible
+            if (typeof pdfjsLib === 'undefined') {
+                await new Promise((resolve, reject) => {
+                    const script = document.createElement('script');
+                    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.7.76/pdf.min.mjs';
+                    script.type = 'module';
+                    script.onload = resolve;
+                    script.onerror = reject;
+                    document.head.appendChild(script);
+                });
+                // Esperar un momento a que el módulo se inicialice
+                await new Promise(r => setTimeout(r, 500));
+                if (typeof pdfjsLib === 'undefined') {
+                    // Intentar import
+                    const mod = await import('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.7.76/pdf.min.mjs');
+                    window.pdfjsLib = mod;
+                }
+            }
+
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.7.76/pdf.worker.min.mjs';
+
+            const arrayBuf = await blob.arrayBuffer();
+            pdfDoc = await pdfjsLib.getDocument({ data: arrayBuf }).promise;
+            pdfTotalPages = pdfDoc.numPages;
+            pdfPageNum = 1;
+
+            updatePdfButtons();
+            await renderPage(1);
+
+        } catch (e) {
+            console.error('[PDF] Error:', e);
+            showFallback();
+        }
+    }
+
+    async function renderPage(num) {
+        if (!pdfDoc || !modalPdfCanvas) return;
+        const page = await pdfDoc.getPage(num);
+        const container = modalPdfViewer.parentElement;
+        const maxW = Math.min(container.clientWidth - 40, 900);
+        const viewport = page.getViewport({ scale: 1 });
+        const scale = maxW / viewport.width;
+        const scaledViewport = page.getViewport({ scale });
+
+        modalPdfCanvas.height = scaledViewport.height;
+        modalPdfCanvas.width = scaledViewport.width;
+
+        const ctx = modalPdfCanvas.getContext('2d');
+        await page.render({ canvasContext: ctx, viewport: scaledViewport }).promise;
+        pdfPageNum = num;
+        updatePdfButtons();
+    }
+
+    function updatePdfButtons() {
+        pdfPrev.disabled = pdfPageNum <= 1;
+        pdfNext.disabled = pdfPageNum >= pdfTotalPages;
+        pdfPageInfo.textContent = `Pág ${pdfPageNum} / ${pdfTotalPages}`;
+    }
+
+    pdfPrev.addEventListener('click', () => { if (pdfPageNum > 1) renderPage(pdfPageNum - 1); });
+    pdfNext.addEventListener('click', () => { if (pdfPageNum < pdfTotalPages) renderPage(pdfPageNum + 1); });
+    document.addEventListener('keydown', (e) => {
+        if (modalOverlay.hidden) return;
+        if (e.key === 'ArrowLeft' && pdfDoc) { e.preventDefault(); if (pdfPageNum > 1) renderPage(pdfPageNum - 1); }
+        if (e.key === 'ArrowRight' && pdfDoc) { e.preventDefault(); if (pdfPageNum < pdfTotalPages) renderPage(pdfPageNum + 1); }
+    });
+
+    // ── Estrategias fallback ───────────────────────────────────
+    function tryObject(url) {
+        modalObject.style.display = 'none'; modalObject.data = url;
+    }
+    function tryIframe(url) {
+        modalIframe.style.display = 'none'; modalIframe.src = url;
+    }
+    function showFallback() {
+        modalLoading.style.display = 'none';
+        modalObject.style.display = 'none'; modalObject.data = '';
+        modalIframe.style.display = 'none'; modalIframe.src = '';
+        modalPdfViewer.style.display = 'none';
         modalFallback.style.display = 'block';
         clearTimeout(modalTimeout);
     }
 
     function cerrarModal() {
         clearTimeout(modalTimeout);
-        embedStrategy = 2;
         modalOverlay.hidden = true;
-        modalObject.data = '';
-        modalIframe.src = '';
+        modalObject.data = ''; modalIframe.src = ''; pdfDoc = null;
         document.body.style.overflow = '';
     }
 
@@ -363,9 +389,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="botones-libro">
                     <button class="boton-secundario btn-previsualizar"
                             data-embed="${escapeAttr(megaData.embedUrl)}"
+                            data-mega="${escapeAttr(libro.link)}"
                             data-titulo="${escapeAttr(libro.titulo)}"
                             data-link="${escapeAttr(linkAdfocus)}"
-                            aria-label="Consultar ${escapeAttr(libro.titulo)} en Mega">
+                            aria-label="Consultar ${escapeAttr(libro.titulo)}">
                         Consultar
                     </button>
                     <a href="${linkAdfocus}" target="_blank" rel="noopener noreferrer"
@@ -431,7 +458,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const embed = btn.getAttribute('data-embed');
                 const titulo = btn.getAttribute('data-titulo');
                 const link = btn.getAttribute('data-link');
-                abrirModal(titulo, embed, link);
+                const megaLink = btn.getAttribute('data-mega');
+                abrirModal(titulo, embed, link, megaLink);
             });
         });
 
@@ -444,7 +472,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     const embed = btnPrev.getAttribute('data-embed');
                     const titulo = btnPrev.getAttribute('data-titulo');
                     const link = btnPrev.getAttribute('data-link');
-                    abrirModal(titulo, embed, link);
+                    const megaLink = btnPrev.getAttribute('data-mega');
+                    abrirModal(titulo, embed, link, megaLink);
                 }
             });
         });

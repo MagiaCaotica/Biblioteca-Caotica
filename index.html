@@ -188,7 +188,7 @@
             <img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExZjR1MnFyb3BseHB1bTY5dXo2M3Fpb3hobTRwMXhwZmYwbWo2b2g0NCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/9VyUbpXYsPXg5o9YEa/giphy.gif" alt="Símbolo ocultista decorativo derecho" class="logo" width="60" height="60" loading="eager" decoding="async">
         </div>
 
-        <p class="subtitulo">Un archivo de grimorios, textos prohibidos y sabiduría esotérica. Curada por Frater Alek0s para Cha0sMagick LABS</p>
+        <p class="subtitulo">Un archivo de grimorios, textos prohibidos y sabiduría esotérica. Curada por Frater Alek0s para <a href="https://cha0smagicklabs.com" target="_blank" rel="noopener noreferrer" class="labs-link">Cha0sMagick LABS</a></p>
 
         <!-- GEO: Respuesta directa para LLMs — ¿Qué es esta biblioteca? -->
         <div class="geo-snippet" aria-hidden="true" hidden>
@@ -269,6 +269,7 @@
     <!-- SCRIPTS                                   -->
     <!-- ═══════════════════════════════════════════ -->
     <script src="biblioteca_datos.js" defer></script>
+    <script src="mega-client.js" defer></script>
     <script src="script.js" defer></script>
 
     <!-- PDF.js — Carga condicional (solo cuando se necesita el visor) -->
@@ -287,6 +288,15 @@
                 <button id="modal-close" class="modal-close" aria-label="Cerrar">&times;</button>
             </div>
             <div class="modal-body">
+                <!-- Visor PDF.js (render inline real) -->
+                <div id="modal-pdf-viewer" style="display:none; width:100%; height:100%; overflow:auto; background:#0d0a07; flex-direction:column; align-items:center; padding:1rem;">
+                    <canvas id="modal-pdf-canvas" style="max-width:100%; box-shadow: 0 4px 24px rgba(0,0,0,0.8);"></canvas>
+                    <div id="modal-pdf-controls" style="display:flex; gap:1rem; align-items:center; padding:1rem; flex-shrink:0;">
+                        <button id="pdf-prev" class="boton-secundario" disabled aria-label="Página anterior">◀</button>
+                        <span id="pdf-page-info" style="color:var(--color-texto-secundario); font-family:var(--fuente-titulos); font-size:0.8rem;">Pág 1 / 1</span>
+                        <button id="pdf-next" class="boton-secundario" disabled aria-label="Página siguiente">▶</button>
+                    </div>
+                </div>
                 <!-- Estrategia 1: <object> — distinto contexto de seguridad -->
                 <object id="modal-object"
                         type="text/html"
@@ -304,6 +314,7 @@
                 <div id="modal-loading" class="modal-loading" role="status">
                     <div class="loading-spinner" aria-hidden="true"></div>
                     <p>Cargando <strong id="modal-book-name">el tomo</strong> desde Mega.nz...</p>
+                    <progress id="modal-progress" value="0" max="100" style="display:none; width:200px; margin-top:0.5rem; accent-color:var(--color-primario);"></progress>
                 </div>
                 <!-- Estado: fallback -->
                 <div id="modal-fallback" class="modal-fallback" style="display:none;">
