@@ -635,8 +635,7 @@ main {
     border: 1px solid var(--color-borde);
     border-radius: var(--radio-borde-lg);
     width: 100%;
-    max-width: 900px;
-    max-height: 90vh;
+    max-width: 500px;
     display: flex;
     flex-direction: column;
     box-shadow: var(--sombra-lg), 0 0 60px rgba(212, 175, 55, 0.1);
@@ -658,19 +657,15 @@ main {
     font-size: 1rem;
     color: var(--color-primario);
     margin: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    padding-right: var(--espaciado-md);
 }
 
 .modal-close {
     background: none;
     border: 1px solid var(--color-borde);
     color: var(--color-texto-secundario);
-    font-size: 1.5rem;
-    width: 36px;
-    height: 36px;
+    font-size: 1.4rem;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
     cursor: pointer;
     display: flex;
@@ -693,49 +688,38 @@ main {
 }
 
 .modal-body {
-    flex: 1;
-    overflow: hidden;
-    position: relative;
-    min-height: 300px;
+    padding: var(--espaciado-xl) var(--espaciado-lg);
+    text-align: center;
+}
+
+.modal-body-center {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    background-color: #0a0a0a;
+    gap: var(--espaciado-md);
 }
 
-.modal-body iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-    min-height: 400px;
+.modal-info {
+    color: var(--color-texto-principal);
+    margin: 0;
+    font-size: 0.95rem;
 }
 
-.modal-loading {
-    text-align: center;
-    color: var(--color-texto-secundario);
+.modal-info strong {
+    color: var(--color-primario);
 }
 
-.modal-loading p {
-    margin-top: var(--espaciado-md);
-    font-style: italic;
-}
-
-.modal-error {
-    text-align: center;
-    padding: var(--espaciado-xl);
-    color: var(--color-texto-secundario);
-    max-width: 500px;
-}
-
-.modal-error p:first-child {
-    color: #ff6b6b;
-    margin-bottom: var(--espaciado-md);
-}
-
-.modal-error-hint {
-    font-size: 0.85rem;
+.modal-info-hint {
     color: var(--color-texto-terciario);
+    font-size: 0.8rem;
     font-style: italic;
+    margin: 0;
+}
+
+.modal-warning {
+    color: #ff6b6b;
+    font-size: 0.9rem;
+    margin: var(--espaciado-sm) 0 0 0;
 }
 
 .modal-footer {
@@ -754,11 +738,7 @@ main {
 
 @media (max-width: 600px) {
     .modal-container {
-        max-height: 95vh;
-        border-radius: 0;
-    }
-    .modal-title {
-        font-size: 0.85rem;
+        max-width: 95vw;
     }
 }
 

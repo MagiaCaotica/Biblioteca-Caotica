@@ -245,34 +245,25 @@
     <script type="module" id="pdfjs-loader" data-src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.7.76/pdf.min.mjs"></script>
 
     <!-- ═══════════════════════════════════════════ -->
-    <!-- MODAL DE PREVISUALIZACIÓN (Mega.nz Embed)  -->
+    <!-- MODAL DE PREVISUALIZACIÓN — Redirige a Mega -->
     <!-- ═══════════════════════════════════════════ -->
     <div id="modal-preview" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" hidden>
-        <div class="modal-container">
+        <div class="modal-container modal-redirect">
             <div class="modal-header">
-                <h2 id="modal-title" class="modal-title">Previsualizando tomo...</h2>
-                <button id="modal-close" class="modal-close" aria-label="Cerrar previsualización">&times;</button>
+                <h2 id="modal-title" class="modal-title">Abriendo previsualización...</h2>
+                <button id="modal-close" class="modal-close" aria-label="Cerrar">&times;</button>
             </div>
-            <div class="modal-body">
-                <div id="modal-loading" class="modal-loading" role="status">
-                    <div class="loading-spinner" aria-hidden="true"></div>
-                    <p>Invocando el tomo desde Mega...</p>
-                </div>
-                <iframe id="modal-iframe"
-                        title="Previsualización del documento"
-                        sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-                        allow="fullscreen"
-                        loading="lazy"
-                        style="display:none;"
-                        referrerpolicy="no-referrer">
-                </iframe>
-                <div id="modal-error" class="modal-error" role="alert" style="display:none;">
-                    <p>No se pudo cargar la previsualización. El archivo puede estar protegido o no ser compatible con vista previa.</p>
-                    <p class="modal-error-hint">Puedes descargarlo directamente usando el botón "Descargar Tomo".</p>
+            <div class="modal-body modal-body-center">
+                <div class="loading-spinner" aria-hidden="true"></div>
+                <p class="modal-info">Abriendo el tomo en <strong>Mega.nz</strong> en una nueva pestaña.</p>
+                <p class="modal-info-hint">Si no se abre automáticamente, usa el botón de abajo.</p>
+                <div id="modal-popup-blocked" style="display:none;">
+                    <p class="modal-warning">⚠️ El navegador bloqueó la apertura automática.</p>
+                    <a id="modal-fallback-link" href="#" target="_blank" rel="noopener noreferrer" class="boton-principal" style="display:inline-block;margin-top:0.5rem;">Abrir Previsualización en Mega</a>
                 </div>
             </div>
             <div class="modal-footer">
-                <a id="modal-download" href="#" target="_blank" rel="noopener noreferrer" class="boton-principal">Descargar este Tomo</a>
+                <a id="modal-download" href="#" target="_blank" rel="noopener noreferrer" class="boton-principal">⬇ Descargar Tomo</a>
             </div>
         </div>
     </div>
