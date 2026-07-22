@@ -343,15 +343,17 @@ document.addEventListener('DOMContentLoaded', () => {
             // ── Construir HTML de la portada ────────────────────
             const portadaHTML = `
                 <div class="portada-libro" role="img" aria-label="Portada de ${escapeAttr(libro.titulo)}">
-                    <div class="portada-fondo" style="background: linear-gradient(160deg, ${color.acento} 0%, ${color.fondo} 40%, #0a0a0a 100%);"></div>
+                    <div class="portada-fondo" style="background: linear-gradient(160deg, ${color.acento} 0%, ${color.fondo} 40%, #0d0a07 100%);"></div>
                     <div class="portada-patron"></div>
                     <div class="portada-contenido">
                         <span class="portada-icono" aria-hidden="true">${icono}</span>
-                        <span class="portada-titulo">${escapeHTML(libro.titulo)}</span>
-                        <span class="portada-autor">${escapeHTML(libro.autor)}</span>
+                        <div class="portada-marco">
+                            <span class="portada-titulo">${escapeHTML(libro.titulo)}</span>
+                            <span class="portada-autor">${escapeHTML(libro.autor)}</span>
+                        </div>
                     </div>
                     <div class="portada-overlay">
-                        <span class="portada-overlay-texto">Previsualizar</span>
+                        <span class="portada-overlay-texto">Consultar</span>
                     </div>
                 </div>
             `;
@@ -363,13 +365,13 @@ document.addEventListener('DOMContentLoaded', () => {
                             data-embed="${escapeAttr(megaData.embedUrl)}"
                             data-titulo="${escapeAttr(libro.titulo)}"
                             data-link="${escapeAttr(linkAdfocus)}"
-                            aria-label="Previsualizar ${escapeAttr(libro.titulo)} en Mega">
-                        👁 Previsualizar
+                            aria-label="Consultar ${escapeAttr(libro.titulo)} en Mega">
+                        Consultar
                     </button>
                     <a href="${linkAdfocus}" target="_blank" rel="noopener noreferrer"
                        class="boton-principal"
                        aria-label="Descargar ${escapeAttr(libro.titulo)}">
-                        ⬇ Descargar
+                        Descargar
                     </a>
                 </div>
             ` : `
@@ -377,7 +379,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <a href="${linkAdfocus}" target="_blank" rel="noopener noreferrer"
                        class="boton-principal"
                        aria-label="Descargar ${escapeAttr(libro.titulo)}">
-                        ⬇ Descargar Tomo
+                        Descargar Tomo
                     </a>
                 </div>
             `;
@@ -385,12 +387,14 @@ document.addEventListener('DOMContentLoaded', () => {
             // ── Armar tarjeta completa ─────────────────────────
             divLibro.innerHTML = `
                 ${portadaHTML}
-                <h3 id="${tituloId}">${escapeHTML(libro.titulo)}</h3>
-                <p class="autor">Por: ${escapeHTML(libro.autor)}</p>
-                <p class="resumen">${escapeHTML(libro.resumen || 'No hay resumen disponible.')}</p>
-                <span class="categoria">${escapeHTML(libro.categoria)}</span>
-                <div class="libro-meta">
-                    <span class="idioma">Idioma: ${escapeHTML(libro.idioma || 'No especificado')}</span>
+                <div class="libro-inner">
+                    <h3 id="${tituloId}">${escapeHTML(libro.titulo)}</h3>
+                    <p class="autor">${escapeHTML(libro.autor)}</p>
+                    <p class="resumen">${escapeHTML(libro.resumen || 'No hay resumen disponible.')}</p>
+                    <div class="libro-meta">
+                        <span class="categoria">${escapeHTML(libro.categoria)}</span>
+                        <span class="idioma">${escapeHTML(libro.idioma || 'No especificado')}</span>
+                    </div>
                 </div>
                 <div class="libro-acciones">
                     ${botonesHTML}

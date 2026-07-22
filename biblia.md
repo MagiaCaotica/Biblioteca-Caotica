@@ -320,6 +320,139 @@ rm -rf node_modules package.json package-lock.json
 
 ---
 
+## 🔬 VERIFICACIÓN DE CONTENIDO DE PDFs
+
+Este proceso descarga las primeras ~512KB de cada PDF desde Mega, extrae el texto
+de las páginas 2-4 (la página 1 suele ser propaganda) usando `pdf-parse`, y compara
+el título/autor encontrado contra `biblioteca_datos.js`.
+
+### Requisitos
+
+```bash
+npm install megajs pdf-parse
+```
+
+### Script de verificación
+
+Crear `verificar_texto.js`:
+
+```javascript
+const mega = require('megajs');
+const fs = require('fs');
+const pdfParse = require('pdf-parse');
+
+const HEAD_BYTES = 524288; // 512KB
+const CHECKPOINT = 'checkpoint.json';
+
+// Cargar biblioteca
+const raw = fs.readFileSync('biblioteca_datos.js', 'utf8');
+const biblioteca = eval(raw.match(/\[([\s\S]*)\]/)[0]);
+
+function norm(s) { return (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,' ').replace(/\s+/g,' ').trim(); }
+function sim(a,b) { const na=norm(a),nb=norm(b); if(!na||!nb) return 0; if(na.includes(nb)||nb.includes(na)) return 0.9; const wa=new Set(na.split(' ').filter(w=>w.length>2)),wb=new Set(nb.split(' ').filter(w=>w.length>2)); if(!wa.size||!wb.size) return 0; let inter=0; for(const w of wa) if(wb.has(w)) inter++; return inter/(wa.size+wb.size-inter); }
+
+function extractFromText(texto) {
+    if (!texto || texto.length < 10) return { titulo: null, autor: null };
+    const lines = texto.split(/\n/).map(l=>l.trim()).filter(l=>l.length>3);
+    let titulo = null, autor = null;
+    for (const line of lines.slice(0, 10)) {
+        if (line.length > 10 && line.length < 120 && !/^(http|www|ISBN|©|copyright|contents|chapter)/i.test(line)) {
+            titulo = line.replace(/\s{2,}/g,' ').trim(); break;
+        }
+    }
+    const byMatch = lines.slice(0,15).join(' ').match(/(?:by|por|de)\s+([A-ZÁÉÍÓÚÑ][A-Za-záéíóúñ\s\.\-]{3,40})/);
+    if (byMatch) autor = byMatch[1].trim();
+    if (!autor) {
+        for (const line of lines.slice(0, 15)) {
+            if (/^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)?$/.test(line) && line.length < 40) {
+                if (line !== titulo && !/^(The|A|An|El|La|Los|Las|De|Del|En|Con|Por|Para)\b/i.test(line)) { autor = line; break; }
+            }
+        }
+    }
+    return { titulo, autor };
+}
+
+function findNode(root, nid) { /* recursivo — ver sync_mega.js */ }
+function walkAll(nodes, path, arr) { /* recursivo — ver sync_mega.js */ }
+async function downloadChunk(node, bytes) { /* ver verificar_metadatos.js */ }
+
+const storage = new mega.Storage({ email: 'TU_EMAIL', password: 'TU_PASSWORD' });
+storage.on('ready', async () => {
+    const megaFiles = []; walkAll(storage.root.children||[], '/', megaFiles);
+    
+    // Matchear por nombre
+    const matched = []; const used = new Set();
+    for (const book of biblioteca) {
+        let best=null, bestS=0;
+        for (const mf of megaFiles) {
+            if (used.has(mf.nodeId)) continue;
+            const s = sim(book.titulo, mf.nombre)*0.7 + sim(book.autor, mf.nombre)*0.3;
+            if (s>bestS && s>0.3) { bestS=s; best=mf; }
+        }
+        if (best) { matched.push({book,mf:best}); used.add(best.nodeId); }
+    }
+
+    // Checkpoint
+    let cp = { done:0, results:[] };
+    if (fs.existsSync(CHECKPOINT)) cp = JSON.parse(fs.readFileSync(CHECKPOINT,'utf8'));
+
+    for (let i=cp.done; i<matched.length; i++) {
+        const {book, mf} = matched[i];
+        const node = findNode(storage.root, mf.nodeId);
+        const buf = await downloadChunk(node, HEAD_BYTES);
+        let pdfData = null;
+        try { pdfData = await pdfParse(buf, { max: 5 }); } catch(e) {}
+        let texto = pdfData?.text || '';
+        // Saltar página 1 (propaganda)
+        const pageBreak = texto.indexOf('\n\n');
+        if (pageBreak > 50 && pageBreak < 500) texto = texto.substring(pageBreak).trim();
+        const extraido = extractFromText(texto);
+        
+        cp.results.push({
+            tituloActual: book.titulo, autorActual: book.autor,
+            textoTit: extraido.titulo, textoAut: extraido.autor,
+            nombreMega: mf.nombre
+        });
+
+        if ((i+1)%50===0) { cp.done=i+1; fs.writeFileSync(CHECKPOINT, JSON.stringify(cp)); }
+    }
+
+    // Reporte
+    const discrepancias = cp.results.filter(r => {
+        if (!r.textoTit && !r.textoAut) return false;
+        const tOK = !r.textoTit || sim(r.tituloActual, r.textoTit) > 0.4;
+        const aOK = !r.textoAut || sim(r.autorActual, r.textoAut) > 0.4;
+        return !tOK || !aOK;
+    });
+    fs.writeFileSync('texto_reporte.json', JSON.stringify({
+        total: matched.length,
+        discrepancias: discrepancias.length,
+        muestra: discrepancias.slice(0, 100)
+    }, null, 2));
+    console.log(`Discrepancias: ${discrepancias.length}/${matched.length}`);
+    storage.close(); process.exit(0);
+});
+```
+
+### Ejecución
+
+```bash
+# IMPORTANTE: Cambiar email/password en el script antes de ejecutar
+node verificar_texto.js
+
+# Tiempo estimado: 1.5-2 horas para 1,500+ PDFs
+# El checkpoint permite retomar si se interrumpe
+# Resultado en: texto_reporte.json
+```
+
+### Interpretación del reporte
+
+- `discrepancias`: libros donde el título/autor extraído del PDF NO coincide con `biblioteca_datos.js`
+- Revisar la `muestra` para decidir si corregir manualmente o confiar en los datos actuales
+- Los PDFs sin metadatos extraíbles aparecen como `textoTit: null`
+
+---
+
 ## 📦 DEPLOY
 
 ```bash
