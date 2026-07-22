@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════════════════
    BIBLIOTECA CAÓTICA ARCANA — SCRIPT.JS
-   Infinite Scroll | Search | Filters | PDF Viewer | Structured Data
+   Portadas generativas | Mega.nz Embed | Modal Preview | Scroll Infinito
    ═══════════════════════════════════════════════════════════════════ */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -10,6 +10,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const filtroCategoria = document.getElementById('filtro-categoria');
     const filtroIdioma = document.getElementById('filtro-idioma');
     const totalLibrosEl = document.getElementById('total-libros');
+    const modalOverlay = document.getElementById('modal-preview');
+    const modalIframe = document.getElementById('modal-iframe');
+    const modalTitle = document.getElementById('modal-title');
+    const modalLoading = document.getElementById('modal-loading');
+    const modalError = document.getElementById('modal-error');
+    const modalClose = document.getElementById('modal-close');
+    const modalDownload = document.getElementById('modal-download');
 
     // ── State ──────────────────────────────────────────────────
     let todosLosLibros = [];
@@ -18,6 +25,46 @@ document.addEventListener('DOMContentLoaded', () => {
     const LIBROS_POR_PAGINA = 12;
     let estaCargando = false;
     let observer = null;
+
+    // ── Íconos para las portadas según categoría ────────────────
+    const iconosCategoria = {
+        'Magia del Caos': '☿',
+        'Cábala': '🔯',
+        'Alquimia': '⚗',
+        'Tarot': '🂠',
+        'Hermetismo': '☥',
+        'Wicca y Brujería': '🌙',
+        'Magia Práctica': '🕯',
+        'Magia Sexual': '⚤',
+        'Magia Moderna / DKMU': '🌆',
+        'Satanismo y Luciferismo': '🐐',
+        'Senda de la Mano Izquierda': '↜',
+        'Grimorios Clásicos': '📜',
+        'Grimorios / Genios': '🧞',
+        'Runas y Tradición Nórdica': 'ᚱ',
+        'Celtismo / Paganismo': '🌳',
+        'Paganismo': '🍂',
+        'Misterios Egipcios': '𓂀',
+        'Gnosticismo': '✡',
+        'Rosacrucismo': '🌹',
+        'Órdenes Secretas': '🔑',
+        'Ocultismo General': '🜁',
+        'Ocultismo Clásico': '📖',
+        'Ocultismo Comparado': '⚖',
+        'Astrología': '🌌',
+        'Clarividencia': '🔮',
+        'Magia Herbolaria': '🌿',
+        'Magia Tradicional': '🪄',
+        'Teoría Mágica / Hiperstición': '⚡',
+        'Tecnomagia': '💻',
+        'Filosofía Oriental': '☯',
+        'Espiritualidad': '🙏',
+        'Mitología / Ocultismo': '🏛',
+        'Biografía / Ocultismo': '👤',
+        'Investigación': '🔍',
+        'Entrevistas / Teoría': '🎙',
+    };
+    const iconoDefault = '📚';
 
     // ── Data Loading ───────────────────────────────────────────
     if (typeof BIBLIOTECA_DATOS !== 'undefined' && BIBLIOTECA_DATOS.length > 0) {
@@ -42,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
         estanteria.innerHTML = '<div class="libro-placeholder" role="alert">No se pudo cargar la biblioteca. El grimorio de datos podría estar corrupto o ausente.</div>';
     }
 
-    // ── Update Meta Description with Live Count ────────────────
+    // ── Update Meta Description ────────────────────────────────
     function actualizarMetaDescription(total) {
         const metaDesc = document.querySelector('meta[name="description"]');
         if (metaDesc) {
@@ -52,16 +99,59 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // ── Mystic Symbols Generator ───────────────────────────────
-    function generarSimbolosOcultos() {
-        const simbolos = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ⊕⊗⊘⊚⊛⊜⊝⊞⊟⊠⊡⋄⋇⋈⋉⋊⋋⋌⋍⋎⋏⋐⋑⋒⋓⋔⋕⋖⋗⋘⋙⋚⋛⋜⋝⋞⋟⋠⋡⋢⋣⋤⋥⋦⋧⋨⋩⋪⋫⋬⋭∴∵∷∸∹∺∻∼∽∾∿≀≁≂≃≄≅≆≇≈≉≊≋≌≍≎≏≐≑≒≓≔≕≖≗≘≙≚≛≜≝≞≟≠≡≢≤≥≦≧≨≩≪≫≬≭≮≯≰≱≲≳≴≵≶≷≸≹≺≻≼≽≾≿⊀⊁⊂⊃⊄⊅⊆⊇⊈⊉⊊⊋⊌⊍⊎⊏⊐⊑⊒⊓⊔';
-        let resultado = '';
-        const cantidad = 130;
-        for (let i = 0; i < cantidad; i++) {
-            resultado += simbolos.charAt(Math.floor(Math.random() * simbolos.length));
-            if (Math.random() > 0.94) resultado += '<br>';
+    // ── Color Generator from Title ─────────────────────────────
+    function generarColorPortada(titulo) {
+        let hash = 0;
+        for (let i = 0; i < titulo.length; i++) {
+            hash = titulo.charCodeAt(i) + ((hash << 5) - hash);
         }
-        return resultado;
+        const hue = Math.abs(hash) % 360;
+        const sat = 35 + (Math.abs(hash) % 25); // 35%–60% saturation
+        const light = 18 + (Math.abs(hash >> 3) % 12); // 18%–30% lightness
+        return {
+            fondo: `hsl(${hue}, ${sat}%, ${light}%)`,
+            acento: `hsl(${hue}, ${sat + 10}%, ${light + 10}%)`,
+            borde: `hsl(${hue}, ${sat}%, ${light + 18}%)`,
+        };
+    }
+
+    // ── Icon per Category ─────────────────────────────────────
+    function obtenerIcono(categoria) {
+        for (const [key, icono] of Object.entries(iconosCategoria)) {
+            if (categoria.includes(key) || key.includes(categoria)) {
+                return icono;
+            }
+        }
+        return iconoDefault;
+    }
+
+    // ── Parse Mega URL → Embed URL ─────────────────────────────
+    function parsearMegaUrl(url) {
+        if (!url || !url.includes('mega.nz')) return null;
+
+        // Formato 1: https://mega.nz/file/FILE_ID#KEY
+        const matchFile = url.match(/mega\.nz\/file\/([^#]+)#(.+)/);
+        if (matchFile) {
+            return {
+                fileId: matchFile[1],
+                key: matchFile[2],
+                embedUrl: `https://mega.nz/embed#!${matchFile[1]}!${matchFile[2]}`,
+                esMega: true
+            };
+        }
+
+        // Formato 2: https://mega.nz/#!FILE_ID!KEY (legacy)
+        const matchLegacy = url.match(/mega\.nz\/#!([^!]+)!(.+)/);
+        if (matchLegacy) {
+            return {
+                fileId: matchLegacy[1],
+                key: matchLegacy[2],
+                embedUrl: `https://mega.nz/embed#!${matchLegacy[1]}!${matchLegacy[2]}`,
+                esMega: true
+            };
+        }
+
+        return null;
     }
 
     // ── AdFoc.us Link Builder ──────────────────────────────────
@@ -71,10 +161,62 @@ document.addEventListener('DOMContentLoaded', () => {
         return `https://adfoc.us/serve/sitelinks/?id=${idUsuarioAdfocus}&url=${urlParaAdfocus}`;
     }
 
-    // ── Detect if link is a direct PDF ─────────────────────────
-    function esPDFDirecto(url) {
-        return /\.pdf(\?.*)?$/i.test(url) && !url.includes('mega.nz');
+    // ── Modal Functions ────────────────────────────────────────
+    function abrirModal(titulo, embedUrl, linkDescarga) {
+        modalTitle.textContent = titulo;
+        modalIframe.style.display = 'none';
+        modalLoading.style.display = 'block';
+        modalError.style.display = 'none';
+        modalIframe.src = '';
+        modalDownload.href = linkDescarga;
+
+        modalOverlay.hidden = false;
+        document.body.style.overflow = 'hidden';
+
+        // Cargar iframe después de un pequeño delay para que el loading se muestre
+        setTimeout(() => {
+            modalIframe.src = embedUrl;
+            modalIframe.onload = () => {
+                modalLoading.style.display = 'none';
+                modalIframe.style.display = 'block';
+            };
+            modalIframe.onerror = () => {
+                modalLoading.style.display = 'none';
+                modalError.style.display = 'block';
+            };
+
+            // Fallback: si después de 8 segundos no cargó, mostrar error
+            setTimeout(() => {
+                if (modalIframe.style.display === 'none' && modalError.style.display === 'none') {
+                    modalLoading.style.display = 'none';
+                    modalError.style.display = 'block';
+                }
+            }, 8000);
+        }, 300);
+
+        // Focus trap: mover foco al modal
+        modalClose.focus();
     }
+
+    function cerrarModal() {
+        modalOverlay.hidden = true;
+        modalIframe.src = '';
+        document.body.style.overflow = '';
+    }
+
+    modalClose.addEventListener('click', cerrarModal);
+
+    modalOverlay.addEventListener('click', (e) => {
+        if (e.target === modalOverlay) {
+            cerrarModal();
+        }
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !modalOverlay.hidden) {
+            cerrarModal();
+        }
+    });
 
     // ── Render Books ───────────────────────────────────────────
     function mostrarLibros() {
@@ -96,17 +238,56 @@ document.addEventListener('DOMContentLoaded', () => {
             divLibro.setAttribute('aria-labelledby', `titulo-${sanitizeId(libro.titulo)}`);
 
             const linkAdfocus = crearLinkAdfocus(libro.link);
-            const simbolos = generarSimbolosOcultos();
+            const color = generarColorPortada(libro.titulo);
+            const icono = obtenerIcono(libro.categoria);
             const tituloId = `titulo-${sanitizeId(libro.titulo)}`;
+            const megaData = parsearMegaUrl(libro.link);
 
+            // ── Construir HTML de la portada ────────────────────
+            const portadaHTML = `
+                <div class="portada-libro" role="img" aria-label="Portada de ${escapeAttr(libro.titulo)}">
+                    <div class="portada-fondo" style="background: linear-gradient(160deg, ${color.acento} 0%, ${color.fondo} 40%, #0a0a0a 100%);"></div>
+                    <div class="portada-patron"></div>
+                    <div class="portada-contenido">
+                        <span class="portada-icono" aria-hidden="true">${icono}</span>
+                        <span class="portada-titulo">${escapeHTML(libro.titulo)}</span>
+                        <span class="portada-autor">${escapeHTML(libro.autor)}</span>
+                    </div>
+                    <div class="portada-overlay">
+                        <span class="portada-overlay-texto">Previsualizar</span>
+                    </div>
+                </div>
+            `;
+
+            // ── Construir botones ──────────────────────────────
+            const botonesHTML = megaData ? `
+                <div class="botones-libro">
+                    <button class="boton-secundario btn-previsualizar"
+                            data-embed="${escapeAttr(megaData.embedUrl)}"
+                            data-titulo="${escapeAttr(libro.titulo)}"
+                            data-link="${escapeAttr(linkAdfocus)}"
+                            aria-label="Previsualizar ${escapeAttr(libro.titulo)} en Mega">
+                        👁 Previsualizar
+                    </button>
+                    <a href="${linkAdfocus}" target="_blank" rel="noopener noreferrer"
+                       class="boton-principal"
+                       aria-label="Descargar ${escapeAttr(libro.titulo)}">
+                        ⬇ Descargar
+                    </a>
+                </div>
+            ` : `
+                <div class="botones-libro">
+                    <a href="${linkAdfocus}" target="_blank" rel="noopener noreferrer"
+                       class="boton-principal"
+                       aria-label="Descargar ${escapeAttr(libro.titulo)}">
+                        ⬇ Descargar Tomo
+                    </a>
+                </div>
+            `;
+
+            // ── Armar tarjeta completa ─────────────────────────
             divLibro.innerHTML = `
-                <a href="${linkAdfocus}" target="_blank" rel="noopener noreferrer"
-                   class="preview-container"
-                   title="Acceder al contenido de: ${escapeAttr(libro.titulo)}"
-                   aria-label="Ver contenido de ${escapeAttr(libro.titulo)}">
-                    <div class="symbol-preview" aria-hidden="true">${simbolos}</div>
-                    <div class="preview-overlay"><span>Ver Contenido</span></div>
-                </a>
+                ${portadaHTML}
                 <h3 id="${tituloId}">${escapeHTML(libro.titulo)}</h3>
                 <p class="autor">Por: ${escapeHTML(libro.autor)}</p>
                 <p class="resumen">${escapeHTML(libro.resumen || 'No hay resumen disponible.')}</p>
@@ -115,9 +296,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <span class="idioma">Idioma: ${escapeHTML(libro.idioma || 'No especificado')}</span>
                 </div>
                 <div class="libro-acciones">
-                    <a href="${linkAdfocus}" target="_blank" rel="noopener noreferrer"
-                       class="boton-principal"
-                       aria-label="Descargar ${escapeAttr(libro.titulo)}">Descargar Tomo</a>
+                    ${botonesHTML}
                     <div class="botones-compartir">
                         <a href="https://twitter.com/intent/tweet?text=${encodeURIComponent('He encontrado el tomo \'' + libro.titulo + '\' en la Biblioteca Ocultista:')}&url=${encodeURIComponent('https://magiacaotica.github.io/Biblioteca-Caotica/')}"
                            target="_blank" rel="noopener noreferrer"
@@ -142,11 +321,38 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         estanteria.appendChild(fragment);
+
+        // ── Vincular eventos de previsualizar ──────────────────
+        const botonesPreview = estanteria.querySelectorAll('.btn-previsualizar');
+        botonesPreview.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const embed = btn.getAttribute('data-embed');
+                const titulo = btn.getAttribute('data-titulo');
+                const link = btn.getAttribute('data-link');
+                abrirModal(titulo, embed, link);
+            });
+        });
+
+        // ── Vincular click en portada → previsualizar ──────────
+        const portadas = estanteria.querySelectorAll('.portada-libro');
+        portadas.forEach(portada => {
+            portada.addEventListener('click', () => {
+                const btnPrev = portada.closest('.libro').querySelector('.btn-previsualizar');
+                if (btnPrev) {
+                    const embed = btnPrev.getAttribute('data-embed');
+                    const titulo = btnPrev.getAttribute('data-titulo');
+                    const link = btnPrev.getAttribute('data-link');
+                    abrirModal(titulo, embed, link);
+                }
+            });
+        });
+
         indiceLibrosMostrados = fin;
         estaCargando = false;
     }
 
-    // ── Helper: Sanitize HTML ──────────────────────────────────
+    // ── Helper Functions ───────────────────────────────────────
     function escapeHTML(str) {
         const div = document.createElement('div');
         div.textContent = str;
@@ -154,7 +360,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function escapeAttr(str) {
-        return str.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     }
 
     function sanitizeId(str) {
@@ -228,7 +434,6 @@ document.addEventListener('DOMContentLoaded', () => {
         iniciarVista();
     }
 
-    // Debounce search for performance
     let debounceTimer;
     function filtrarLibrosDebounced() {
         clearTimeout(debounceTimer);
@@ -238,7 +443,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // ── Intersection Observer (Infinite Scroll) ────────────────
     function configurarIntersectionObserver() {
         if ('IntersectionObserver' in window) {
-            // Crear un elemento centinela al final
             const sentinel = document.createElement('div');
             sentinel.id = 'scroll-sentinel';
             sentinel.style.height = '1px';
@@ -252,13 +456,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         mostrarLibros();
                     }
                 });
-            }, {
-                rootMargin: '400px' // Preload 400px before reaching the end
-            });
+            }, { rootMargin: '400px' });
 
             observer.observe(sentinel);
         } else {
-            // Fallback: scroll event
             let scrollTicking = false;
             window.addEventListener('scroll', () => {
                 if (!scrollTicking) {
@@ -283,12 +484,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Keyboard shortcut: Ctrl+K or / to focus search
     document.addEventListener('keydown', (e) => {
-        if ((e.ctrlKey && e.key === 'k') || (e.key === '/' && document.activeElement === document.body)) {
+        if (modalOverlay.hidden && ((e.ctrlKey && e.key === 'k') || (e.key === '/' && document.activeElement === document.body))) {
             e.preventDefault();
             buscador.focus();
         }
     });
 
     // ── Log ────────────────────────────────────────────────────
-    console.log(`[Biblioteca Caótica Arcana] ${todosLosLibros.length} tomos indexados. Listo para servir sabiduría. 🕯️`);
+    const librosConMega = todosLosLibros.filter(l => l.link && l.link.includes('mega.nz')).length;
+    console.log(`[Biblioteca Caótica Arcana] ${todosLosLibros.length} tomos indexados · ${librosConMega} con previsualización Mega.nz · Listo 🕯️`);
 });

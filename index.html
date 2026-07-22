@@ -244,6 +244,39 @@
     <!-- PDF.js — Carga condicional (solo cuando se necesita el visor) -->
     <script type="module" id="pdfjs-loader" data-src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.7.76/pdf.min.mjs"></script>
 
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- MODAL DE PREVISUALIZACIÓN (Mega.nz Embed)  -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div id="modal-preview" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" hidden>
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2 id="modal-title" class="modal-title">Previsualizando tomo...</h2>
+                <button id="modal-close" class="modal-close" aria-label="Cerrar previsualización">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="modal-loading" class="modal-loading" role="status">
+                    <div class="loading-spinner" aria-hidden="true"></div>
+                    <p>Invocando el tomo desde Mega...</p>
+                </div>
+                <iframe id="modal-iframe"
+                        title="Previsualización del documento"
+                        sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                        allow="fullscreen"
+                        loading="lazy"
+                        style="display:none;"
+                        referrerpolicy="no-referrer">
+                </iframe>
+                <div id="modal-error" class="modal-error" role="alert" style="display:none;">
+                    <p>No se pudo cargar la previsualización. El archivo puede estar protegido o no ser compatible con vista previa.</p>
+                    <p class="modal-error-hint">Puedes descargarlo directamente usando el botón "Descargar Tomo".</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a id="modal-download" href="#" target="_blank" rel="noopener noreferrer" class="boton-principal">Descargar este Tomo</a>
+            </div>
+        </div>
+    </div>
+
     <!-- Service Worker Registration -->
     <script>
         if ('serviceWorker' in navigator) {
