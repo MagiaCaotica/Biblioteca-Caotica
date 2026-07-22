@@ -245,25 +245,32 @@
     <script type="module" id="pdfjs-loader" data-src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.7.76/pdf.min.mjs"></script>
 
     <!-- ═══════════════════════════════════════════ -->
-    <!-- MODAL DE PREVISUALIZACIÓN — Redirige a Mega -->
+    <!-- MODAL DE PREVISUALIZACIÓN — Mega.nz Embed   -->
     <!-- ═══════════════════════════════════════════ -->
     <div id="modal-preview" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" hidden>
-        <div class="modal-container modal-redirect">
+        <div class="modal-container modal-embed">
             <div class="modal-header">
-                <h2 id="modal-title" class="modal-title">Abriendo previsualización...</h2>
-                <button id="modal-close" class="modal-close" aria-label="Cerrar">&times;</button>
+                <h2 id="modal-title" class="modal-title">Previsualizando tomo...</h2>
+                <button id="modal-close" class="modal-close" aria-label="Cerrar previsualización">&times;</button>
             </div>
-            <div class="modal-body modal-body-center">
-                <div class="loading-spinner" aria-hidden="true"></div>
-                <p class="modal-info">Abriendo el tomo en <strong>Mega.nz</strong> en una nueva pestaña.</p>
-                <p class="modal-info-hint">Si no se abre automáticamente, usa el botón de abajo.</p>
-                <div id="modal-popup-blocked" style="display:none;">
-                    <p class="modal-warning">⚠️ El navegador bloqueó la apertura automática.</p>
-                    <a id="modal-fallback-link" href="#" target="_blank" rel="noopener noreferrer" class="boton-principal" style="display:inline-block;margin-top:0.5rem;">Abrir Previsualización en Mega</a>
+            <div class="modal-body">
+                <div id="modal-loading" class="modal-loading" role="status">
+                    <div class="loading-spinner" aria-hidden="true"></div>
+                    <p>Cargando previsualización desde Mega.nz...</p>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <a id="modal-download" href="#" target="_blank" rel="noopener noreferrer" class="boton-principal">⬇ Descargar Tomo</a>
+                <iframe id="modal-iframe"
+                        title="Previsualización del documento en Mega"
+                        allow="fullscreen"
+                        style="display:none; border:none; width:100%; height:100%; min-height:500px;">
+                </iframe>
+                <div id="modal-error" class="modal-error" role="alert" style="display:none;">
+                    <p>⏳ La previsualización está tardando más de lo esperado.</p>
+                    <p class="modal-error-hint">Puedes abrirla directamente en Mega o descargar el archivo.</p>
+                    <div style="margin-top:1rem; display:flex; gap:0.5rem; justify-content:center; flex-wrap:wrap;">
+                        <a id="modal-direct-link" href="#" target="_blank" rel="noopener noreferrer" class="boton-principal">Abrir en Mega</a>
+                        <a id="modal-download" href="#" target="_blank" rel="noopener noreferrer" class="boton-secundario">Descargar</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

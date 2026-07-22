@@ -11,11 +11,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const filtroIdioma = document.getElementById('filtro-idioma');
     const totalLibrosEl = document.getElementById('total-libros');
     const modalOverlay = document.getElementById('modal-preview');
+    const modalIframe = document.getElementById('modal-iframe');
     const modalTitle = document.getElementById('modal-title');
     const modalClose = document.getElementById('modal-close');
+    const modalLoading = document.getElementById('modal-loading');
+    const modalError = document.getElementById('modal-error');
     const modalDownload = document.getElementById('modal-download');
-    const modalFallbackLink = document.getElementById('modal-fallback-link');
-    const modalPopupBlocked = document.getElementById('modal-popup-blocked');
+    const modalDirectLink = document.getElementById('modal-direct-link');
 
     // ── State ──────────────────────────────────────────────────
     let todosLosLibros = [];
@@ -160,33 +162,48 @@ document.addEventListener('DOMContentLoaded', () => {
         return `https://adfoc.us/serve/sitelinks/?id=${idUsuarioAdfocus}&url=${urlParaAdfocus}`;
     }
 
-    // ── Modal: Abre previsualización en Mega (pestaña nueva) ─────
+    // ── Modal: Embed de Mega.nz en iframe limpio ───────────────
+    let modalTimeout = null;
+
     function abrirModal(titulo, embedUrl, linkDescarga) {
+        // Resetear estado
+        clearTimeout(modalTimeout);
         modalTitle.textContent = titulo;
+        modalIframe.style.display = 'none';
+        modalIframe.src = '';
+        modalLoading.style.display = 'block';
+        modalError.style.display = 'none';
         modalDownload.href = linkDescarga;
-        modalFallbackLink.href = embedUrl;
-        modalPopupBlocked.style.display = 'none';
+        modalDirectLink.href = embedUrl;
         modalOverlay.hidden = false;
         document.body.style.overflow = 'hidden';
 
-        // Intentar abrir Mega en pestaña nueva
-        const nuevaVentana = window.open(embedUrl, '_blank', 'noopener,noreferrer');
+        // Cargar iframe limpio — sin sandbox, sin referrerpolicy, sin lazy
+        modalIframe.src = embedUrl;
 
-        if (!nuevaVentana || nuevaVentana.closed || typeof nuevaVentana.closed === 'undefined') {
-            // Popup bloqueado → mostrar link manual
-            modalPopupBlocked.style.display = 'block';
-        } else {
-            // Éxito → cerrar modal después de 1.2s (dar tiempo a que se vea)
-            setTimeout(() => {
-                if (!modalOverlay.hidden) cerrarModal();
-            }, 1500);
-        }
+        // Detectar cuando el iframe terminó de cargar
+        modalIframe.onload = () => {
+            clearTimeout(modalTimeout);
+            modalLoading.style.display = 'none';
+            modalIframe.style.display = 'block';
+            modalError.style.display = 'none';
+        };
+
+        // Timeout de respeto: 20s. Si Mega no respondió, mostrar fallback
+        modalTimeout = setTimeout(() => {
+            if (modalIframe.style.display === 'none') {
+                modalLoading.style.display = 'none';
+                modalError.style.display = 'block';
+            }
+        }, 20000);
 
         modalClose.focus();
     }
 
     function cerrarModal() {
+        clearTimeout(modalTimeout);
         modalOverlay.hidden = true;
+        modalIframe.src = '';
         document.body.style.overflow = '';
     }
 
