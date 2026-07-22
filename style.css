@@ -216,6 +216,20 @@ header[role="banner"]::before {
 .contador-etiqueta { margin-right: var(--espaciado-sm); }
 .contador-numero { color: var(--color-primario); font-weight: 700; }
 
+/* Ojo que todo lo ve */
+.ojo-container {
+    text-align: center;
+    margin-bottom: var(--espaciado-md);
+}
+.ojo-gif {
+    width: 100px; height: 100px;
+    object-fit: contain;
+    opacity: 0.75;
+    filter: drop-shadow(0 0 30px rgba(196,164,74,0.25));
+    transition: opacity var(--transicion-lenta);
+}
+.ojo-gif:hover { opacity: 1; }
+
 /* Título */
 .titulo-container {
     display: flex;
@@ -740,6 +754,19 @@ main {
 .modal-info-hint {
     color: var(--color-texto-terciario); font-size: 0.8rem;
     font-style: italic; margin: var(--espaciado-sm) 0;
+}
+
+/* ── Mapa de visitas ──────────────────────────────────────── */
+.visitor-map {
+    text-align: center;
+    margin: var(--espaciado-lg) 0;
+    opacity: 0.7;
+    transition: opacity var(--transicion-media);
+}
+.visitor-map:hover { opacity: 1; }
+.visitor-map img,
+.visitor-map canvas {
+    border-radius: var(--radio-borde-lg);
 }
 
 /* ═══════════════════════════════════════════════════════════════
