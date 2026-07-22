@@ -493,6 +493,9 @@ main {
 .portada-fondo {
     position: absolute; inset: 0; z-index: 0;
     opacity: 0.9;
+    background-size: cover;
+    background-position: center;
+    transition: opacity 0.5s ease, background-image 0.5s ease;
 }
 
 /* Textura de cuero sobre la portada */

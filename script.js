@@ -476,6 +476,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     abrirModal(titulo, embed, link, megaLink);
                 }
             });
+            // ── Thumbnail lazy: cargar página 2 al hacer hover ──
+            portada.addEventListener('mouseenter', () => cargarThumbnail(portada));
         });
 
         indiceLibrosMostrados = fin;
@@ -553,7 +555,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const coincideBusqueda = !textoBusqueda ||
                 (libro.titulo || '').toLowerCase().includes(textoBusqueda) ||
                 (libro.autor || '').toLowerCase().includes(textoBusqueda) ||
-                (libro.resumen || '').toLowerCase().includes(textoBusqueda);
+                (libro.resumen || '').toLowerCase().includes(textoBusqueda) ||
+                (libro.categoria || '').toLowerCase().includes(textoBusqueda);
 
             const coincideCategoria = categoriaSeleccionada === 'todos' || libro.categoria === categoriaSeleccionada;
             const coincideIdioma = idiomaSeleccionado === 'todos' || libro.idioma === idiomaSeleccionado;
@@ -623,6 +626,40 @@ document.addEventListener('DOMContentLoaded', () => {
     // ── Log ────────────────────────────────────────────────────
     const librosConMega = todosLosLibros.filter(l => l.link && l.link.includes('mega.nz')).length;
     console.log(`[Biblioteca Caótica Arcana] ${todosLosLibros.length} tomos indexados · ${librosConMega} con previsualización Mega.nz · Listo 🕯️`);
+
+    // ── Thumbnails Lazy: miniatura de página 2 al hover ────────
+    const thumbnailCache = new Map(); // url → dataURL
+
+    async function cargarThumbnail(portadaEl) {
+        const libroEl = portadaEl.closest('.libro');
+        if (!libroEl) return;
+        const btnPrev = libroEl.querySelector('.btn-previsualizar');
+        if (!btnPrev) return;
+        const megaLink = btnPrev.getAttribute('data-mega');
+        if (!megaLink || thumbnailCache.has(megaLink)) return;
+
+        // Marcar como "cargando" para no reintentar
+        thumbnailCache.set(megaLink, null);
+        
+        try {
+            if (typeof MegaClient !== 'undefined') {
+                const thumb = await MegaClient.getThumbnail(megaLink, 320);
+                if (thumb) {
+                    thumbnailCache.set(megaLink, thumb);
+                    // Reemplazar el fondo de la portada con la miniatura real
+                    const fondo = portadaEl.querySelector('.portada-fondo');
+                    if (fondo) {
+                        fondo.style.backgroundImage = `url(${thumb})`;
+                        fondo.style.backgroundSize = 'cover';
+                        fondo.style.backgroundPosition = 'center';
+                        fondo.style.opacity = '0.85';
+                    }
+                }
+            }
+        } catch(e) {
+            // Silencioso — mantener cover genérico
+        }
+    }
 
     // ── Contador de visitas (localStorage) ──────────────────────
     function actualizarContador() {
