@@ -14,10 +14,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalTitle = document.getElementById('modal-title');
     const modalBookName = document.getElementById('modal-book-name');
     const modalClose = document.getElementById('modal-close');
-    const modalBtnClose = document.getElementById('modal-btn-close');
-    const modalDownload = document.getElementById('modal-download');
-    const modalBlocked = document.getElementById('modal-blocked');
+    const modalObject = document.getElementById('modal-object');
+    const modalIframe = document.getElementById('modal-iframe');
+    const modalLoading = document.getElementById('modal-loading');
     const modalFallback = document.getElementById('modal-fallback');
+    const modalDownload = document.getElementById('modal-download');
+    const modalDirectLink = document.getElementById('modal-direct-link');
 
     // ── State ──────────────────────────────────────────────────
     let todosLosLibros = [];
@@ -162,47 +164,148 @@ document.addEventListener('DOMContentLoaded', () => {
         return `https://adfoc.us/serve/sitelinks/?id=${idUsuarioAdfocus}&url=${urlParaAdfocus}`;
     }
 
-    // ── Modal: Abre previsualización de Mega en pestaña nueva ──
-    //      El iframe inline es imposible: Mega detecta window.top !==
-    //      window.self en su JS y bloquea el renderizado del contenido.
-    let autoCloseTimer = null;
+    // ── Modal: Embed inline de Mega con estrategia dual ─────────
+    //      1. <object> → contexto de seguridad distinto al iframe
+    //      2. <iframe> → fallback sin sandbox ni restricciones
+    //      3. Fallback → botones para abrir en pestaña nueva
+    let modalTimeout = null;
+    let embedStrategy = 0; // 0=object, 1=iframe, 2=fallback
 
     function abrirModal(titulo, embedUrl, linkDescarga) {
-        clearTimeout(autoCloseTimer);
-        modalTitle.textContent = 'Abriendo previsualización...';
+        // Reset
+        clearTimeout(modalTimeout);
+        embedStrategy = 0;
+        modalTitle.textContent = titulo;
         modalBookName.textContent = titulo;
+        modalObject.style.display = 'none';
+        modalObject.data = '';
+        modalIframe.style.display = 'none';
+        modalIframe.src = '';
+        modalLoading.style.display = 'block';
+        modalFallback.style.display = 'none';
         modalDownload.href = linkDescarga;
-        modalFallback.href = embedUrl;
-        modalBlocked.style.display = 'none';
+        modalDirectLink.href = embedUrl;
         modalOverlay.hidden = false;
         document.body.style.overflow = 'hidden';
 
-        // Abrir Mega embed en pestaña nueva
-        const popup = window.open(embedUrl, '_blank', 'noopener,noreferrer');
+        // ── ESTRATEGIA 1: Probar <object> ──────────────────────
+        // <object> tiene un modelo de seguridad diferente al iframe.
+        // Puede que Mega no detecte window.top !== window.self aquí.
+        tryObject(embedUrl);
 
-        if (!popup || popup.closed || typeof popup.closed === 'undefined') {
-            // Popup bloqueado por el navegador
-            modalBlocked.style.display = 'block';
-            modalTitle.textContent = 'Previsualización bloqueada';
-        } else {
-            // Éxito: la pestaña se abrió — cerrar modal en 1.2s
-            modalTitle.textContent = '¡Previsualización abierta!';
-            autoCloseTimer = setTimeout(() => {
-                if (!modalOverlay.hidden) cerrarModal();
-            }, 1200);
-        }
+        // Timeout global: 15 segundos máximo para todo
+        modalTimeout = setTimeout(() => {
+            if (embedStrategy < 2) {
+                // Object falló → probar iframe
+                if (embedStrategy === 0) {
+                    tryIframe(embedUrl);
+                }
+                // Si ya probamos iframe y también falló → fallback
+                if (embedStrategy === 1) {
+                    showFallback();
+                }
+            }
+        }, 15000);
 
         modalClose.focus();
     }
 
+    function tryObject(url) {
+        embedStrategy = 0;
+        modalObject.style.display = 'none';
+        modalIframe.style.display = 'none';
+        modalLoading.style.display = 'block';
+        modalFallback.style.display = 'none';
+
+        // El <object> se carga con data=
+        modalObject.data = url;
+
+        // Timeout para el object: 6 segundos
+        const objectTimeout = setTimeout(() => {
+            if (embedStrategy === 0) {
+                // Object no cargó a tiempo → probar iframe
+                tryIframe(url);
+            }
+        }, 6000);
+
+        modalObject.onload = () => {
+            clearTimeout(objectTimeout);
+            if (embedStrategy === 0) {
+                // ¡Object cargó! Verificar si tiene contenido
+                modalLoading.style.display = 'none';
+                modalObject.style.display = 'block';
+                modalIframe.style.display = 'none';
+                modalFallback.style.display = 'none';
+                embedStrategy = 999; // Éxito
+                clearTimeout(modalTimeout);
+            }
+        };
+
+        modalObject.onerror = () => {
+            clearTimeout(objectTimeout);
+            if (embedStrategy === 0) {
+                tryIframe(url);
+            }
+        };
+    }
+
+    function tryIframe(url) {
+        embedStrategy = 1;
+        modalObject.style.display = 'none';
+        modalObject.data = '';
+        modalIframe.style.display = 'none';
+        modalLoading.style.display = 'block';
+        modalFallback.style.display = 'none';
+
+        // Iframe limpio: sin sandbox, sin restricciones
+        modalIframe.src = url;
+
+        const iframeTimeout = setTimeout(() => {
+            if (embedStrategy === 1) {
+                showFallback();
+            }
+        }, 8000);
+
+        modalIframe.onload = () => {
+            clearTimeout(iframeTimeout);
+            if (embedStrategy === 1) {
+                modalLoading.style.display = 'none';
+                modalIframe.style.display = 'block';
+                modalFallback.style.display = 'none';
+                embedStrategy = 999; // Éxito
+                clearTimeout(modalTimeout);
+            }
+        };
+
+        modalIframe.onerror = () => {
+            clearTimeout(iframeTimeout);
+            if (embedStrategy === 1) {
+                showFallback();
+            }
+        };
+    }
+
+    function showFallback() {
+        embedStrategy = 2;
+        modalObject.style.display = 'none';
+        modalObject.data = '';
+        modalIframe.style.display = 'none';
+        modalIframe.src = '';
+        modalLoading.style.display = 'none';
+        modalFallback.style.display = 'block';
+        clearTimeout(modalTimeout);
+    }
+
     function cerrarModal() {
-        clearTimeout(autoCloseTimer);
+        clearTimeout(modalTimeout);
+        embedStrategy = 2;
         modalOverlay.hidden = true;
+        modalObject.data = '';
+        modalIframe.src = '';
         document.body.style.overflow = '';
     }
 
     modalClose.addEventListener('click', cerrarModal);
-    modalBtnClose.addEventListener('click', cerrarModal);
 
     modalOverlay.addEventListener('click', (e) => {
         if (e.target === modalOverlay) cerrarModal();
