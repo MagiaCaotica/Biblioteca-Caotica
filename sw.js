@@ -3,7 +3,7 @@
    Cache-First Strategy | Offline Support | Performance
    ═══════════════════════════════════════════════════════════════════ */
 
-const CACHE_NAME = 'biblioteca-caotica-v3';
+const CACHE_NAME = 'biblioteca-caotica-v4';
 const ASSETS_TO_CACHE = [
     '/Biblioteca-Caotica/',
     '/Biblioteca-Caotica/index.html',
