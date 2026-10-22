@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault(); abrirModal(this.getAttribute('data-titulo'), this.getAttribute('data-url'), this.getAttribute('data-dl'));
         }));
         estanteria.querySelectorAll('.portada-libro').forEach(p => {
-            p.addEventListener('click',()=>{ const b = p.closest('.libro').querySelector('.btn-previsualizar'); if(b) b.click(); });
+            p.addEventListener('click',()=>{ const a = p.closest('.libro').querySelector('.boton-principal'); if(a) a.click(); });
         });
         indiceLibrosMostrados = fin; estaCargando = false;
     }
