@@ -106,7 +106,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="libro-acciones">
                     ${mega?`
                     <div class="botones-libro">
-                        <button class="boton-secundario btn-previsualizar" data-url="${escapeAttr(libro.link)}" data-titulo="${escapeAttr(libro.titulo)}" data-dl="${escapeAttr(adfocus)}">Consultar</button>
                         <a href="${adfocus}" target="_blank" rel="noopener noreferrer" class="boton-principal">Descargar</a>
                     </div>`:`
                     <div class="botones-libro">
