@@ -18,12 +18,13 @@ document.addEventListener('DOMContentLoaded', () => {
     let estaCargando = false, observer = null;
 
     const iconosCategoria = {
-        'Magia del Caos':'☿','Cábala y Misticismo':'🔯','Hermetismo y Alquimia':'⚗','Adivinación y Artes Adivinatorias':'🔮',
-        'Brujería, Wicca y Paganismo':'🌙','Magia Práctica y Hechicería':'🕯','Ocultismo Oriental':'☯','Satanismo y Senda de la Mano Izquierda':'🐐',
-        'Grimorios y Magia Ceremonial':'📜','Runas y Tradición Nórdica':'ᚱ','Misterios Egipcios y Oriente Medio':'𓂀',
-        'Gnosticismo y Cristianismo Esotérico':'✡','Historia del Ocultismo':'📖','Filosofía Oculta y Teoría Mágica':'⚡',
-        'Tecnomagia y Ocultismo Contemporáneo':'💻','Espiritualidad y Desarrollo Personal':'🙏','Ufología y Misterios':'🛸',
-        'Literatura y Ficción Ocultista':'✒','Textos Clásicos y Referencia':'📚','Ocultismo General':'🜁'
+        '01 · Thelema':'🜔','02 · Magia del Caos':'☿','03 · Grimorios':'📜','04 · Cábala':'🔯',
+        '05 · Hermetismo':'⚗','06 · Tradición Egipcia':'𓂀','07 · Gnosticismo':'✡','08 · Brujería':'🌙',
+        '09 · Runas':'ᚱ','10 · Senda de la Mano Izquierda':'🐐','11 · Tradiciones Orientales':'☯',
+        '12 · Adivinación':'🔮','13 · Mitología':'🏛','14 · Historia del Ocultismo':'📖',
+        '15 · Filosofía Esotérica':'⚡','16 · Psicología':'🧠','17 · Teosofía':'🙏',
+        '18 · Anomalías':'🛸','19 · Pensamiento Libertario':'🏴','20 · Ciencias Sociales':'🏙',
+        '21 · Ficción':'✒','22 · Referencia':'📚'
     };
     const iconoDefault = '📚';
 
@@ -32,8 +33,8 @@ document.addEventListener('DOMContentLoaded', () => {
         todosLosLibros = BIBLIOTECA_DATOS.map(l => ({
             ...l, titulo: l.titulo || l.title || 'Tomo sin título',
             autor: l.autor || l.author || 'Autor Desconocido',
-            resumen: l.resumen || l.summary || 'No hay resumen disponible.',
-            categoria: l.categoria || l.category || 'Ocultismo General',
+            resumen: l.resumen || l.summary || '',
+            categoria: l.categoria || l.category || '22 · Referencia y Miscelánea',
             idioma: l.idioma || l.language || 'No especificado',
             link: l.link || l.url || '#'
         }));
@@ -55,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function escapeAttr(s) { return (s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/`/g,'&#96;'); }
     function sanitizeId(s) { return (s||'').replace(/[^a-zA-Z0-9\u00C0-\u024F\-_]/g,'-').replace(/-+/g,'-').replace(/^-|-$/g,'').toLowerCase() || 'tomo'; }
     function crearLinkAdfocus(url) { return 'https://adfoc.us/serve/sitelinks/?id=757448&url=' + (url||'').replace('#','%23'); }
-    function parsearMegaUrl(url) { const m = (url||'').match(/mega\.nz\/file\/([^#]+)#(.+)/); return m ? { fileId: m[1], key: m[2], embedUrl: 'https://mega.nz/embed#!'+m[1]+'!'+m[2] } : null; }
+    function parsearMegaUrl(url) { const m = (url||'').match(/mega\.nz\/file\/([^#]+)#(.+)/); return m ? { fileId: m[1], key: m[2], embedUrl: 'https://mega.nz/embed/'+m[1]+'#'+m[2] } : null; }
 
     function generarColorPortada(titulo) {
         let hash = 0; for (let i=0;i<(titulo||'').length;i++) hash = titulo.charCodeAt(i)+((hash<<5)-hash);
@@ -96,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="libro-inner">
                     <h3 id="${tid}">${escapeHTML(libro.titulo)}</h3>
                     <p class="autor">${escapeHTML(libro.autor)}</p>
-                    <p class="resumen">${escapeHTML(libro.resumen||'')}</p>
+                    ${libro.resumen ? `<p class="resumen">${escapeHTML(libro.resumen)}</p>` : ''}
                     <div class="libro-meta">
                         <span class="categoria">${escapeHTML(libro.categoria)}</span>
                         <span class="idioma">${escapeHTML(libro.idioma||'')}</span>
@@ -125,16 +126,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }));
         estanteria.querySelectorAll('.portada-libro').forEach(p => {
             p.addEventListener('click',()=>{ const b = p.closest('.libro').querySelector('.btn-previsualizar'); if(b) b.click(); });
-            p.addEventListener('mouseenter',()=>cargarThumbnail(p));
         });
         indiceLibrosMostrados = fin; estaCargando = false;
     }
 
     // ── Modal INLINE ───────────────────────────────────────────
     function abrirModal(titulo, megaUrl, linkDescarga) {
+        const mega = parsearMegaUrl(megaUrl);
         modalTitle.textContent = titulo;
         modalDownload.href = linkDescarga;
-        modalIframe.src = megaUrl;
+        modalIframe.src = mega ? mega.embedUrl : megaUrl;
         modalOverlay.hidden = false;
         document.body.style.overflow = 'hidden';
         modalClose.focus();
@@ -179,22 +180,6 @@ document.addEventListener('DOMContentLoaded', () => {
             observer = new IntersectionObserver(e=>{ if(e[0].isIntersecting&&!estaCargando&&indiceLibrosMostrados<librosFiltradosActuales.length) mostrarLibros(); },{rootMargin:'400px'});
             observer.observe(s);
         }
-    }
-
-    // ── Thumbnails ─────────────────────────────────────────────
-    const thumbCache = new Map();
-    async function cargarThumbnail(portada) {
-        const btn = portada.closest('.libro')?.querySelector('.btn-previsualizar');
-        if (!btn) return;
-        const url = btn.getAttribute('data-url');
-        if (!url || thumbCache.has(url)) return;
-        thumbCache.set(url, null);
-        try {
-            if (typeof MegaClient !== 'undefined') {
-                const thumb = await MegaClient.getThumbnail(url, 320);
-                if (thumb) { thumbCache.set(url, thumb); const f = portada.querySelector('.portada-fondo'); if(f){f.style.backgroundImage='url('+thumb+')';f.style.backgroundSize='cover';f.style.backgroundPosition='center';} }
-            }
-        } catch(e) {}
     }
 
     // ── Contador ───────────────────────────────────────────────

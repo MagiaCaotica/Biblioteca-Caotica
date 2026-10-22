@@ -14,7 +14,7 @@
 │  index.html     ← Entrada única (SPA)               │
 │  style.css      ← Tema oscuro + WCAG AA              │
 │  script.js      ← Lógica: scroll, filtros, modal     │
-│  biblioteca_datos.js ← 1,567 libros (594 KB)        │
+│  biblioteca_datos.js ← 2,479 libros (862 KB)        │
 │  leer.html      ← Visor PDF.js standalone            │
 │  sw.js          ← Service Worker (cache)             │
 │  manifest.json  ← PWA                                │
@@ -134,10 +134,10 @@ DOMContentLoaded
 |---------|-------------|
 | `mostrarLibros()` | Renderiza 12 libros por lote. Usa `DocumentFragment` para rendimiento |
 | `generarColorPortada(titulo)` | Hash del título → color HSL único para cada portada |
-| `obtenerIcono(categoria)` | Mapa 38 categorías → emoji/unicode representativo |
-| `parsearMegaUrl(url)` | Extrae fileId + key de URL Mega → genera `mega.nz/embed#!ID!KEY` |
+| `obtenerIcono(categoria)` | Mapa de las 22 salas → emoji/unicode representativo |
+| `parsearMegaUrl(url)` | Extrae fileId + key de URL Mega → genera `mega.nz/embed/ID#KEY` |
 | `crearLinkAdfocus(url)` | Envuelve URL con monetización AdFoc.us |
-| `abrirModal(titulo, embedUrl, link)` | Abre previsualización en pestaña nueva (`window.open`) |
+| `abrirModal(titulo, embedUrl, link)` | Abre la previsualización embebida de Mega en el modal (iframe) |
 | `cerrarModal()` | Cierra modal, restaura scroll |
 | `filtrarLibros()` | Filtra por texto + categoría + idioma |
 | `filtrarLibrosDebounced()` | Debounce 250ms para el buscador |
@@ -163,31 +163,44 @@ DOMContentLoaded
 
 ### `biblioteca_datos.js` — Base de datos
 
-**Rol**: Catálogo completo de libros. Un array de 1,567 objetos.
+**Rol**: Catálogo completo de libros. Un array de 2,479 objetos.
 
 **Formato de cada entrada**:
 ```javascript
 {
     "autor":    "Christopher Penczak",
     "titulo":   "City Magick: Spells, Rituals, and Symbols for the Urban Witch",
-    "resumen":  "City Magick challenges the belief that magic only resides in nature...",
-    "categoria": "Tecnomagia y Ocultismo Contemporáneo",
+    "resumen":  "Manual de magia urbana: hechizos, rituales y símbolos para la bruja de ciudad.",
+    "categoria": "08 · Brujería, Wicca y Paganismo",
     "idioma":   "Inglés",
     "link":     "https://mega.nz/file/uN0BmLqJ#HJGs1HSanT8H5jWEixh3vTrphcx7PZ48J2xmGc3NCvQ"
 }
 ```
 
-**Taxonomía (20 categorías)**:
+**Taxonomía (22 salas)**:
 ```
-Ocultismo General · Cábala y Misticismo · Satanismo y Senda de la Mano Izquierda
-Magia del Caos · Grimorios y Magia Ceremonial · Adivinación y Artes Adivinatorias
-Ocultismo Oriental · Brujería, Wicca y Paganismo · Hermetismo y Alquimia
-Misterios Egipcios y Oriente Medio · Runas y Tradición Nórdica
-Magia Práctica y Hechicería · Historia del Ocultismo
-Gnosticismo y Cristianismo Esotérico · Espiritualidad y Desarrollo Personal
-Ufología y Misterios · Tecnomagia y Ocultismo Contemporáneo
-Filosofía Oculta y Teoría Mágica · Literatura y Ficción Ocultista
-Textos Clásicos y Referencia
+01 · Thelema y Crowleyana
+02 · Magia del Caos
+03 · Grimorios y Magia Ceremonial
+04 · Cábala y Misticismo Hebreo
+05 · Hermetismo y Alquimia
+06 · Tradición Egipcia
+07 · Gnosticismo y Cristianismo Esotérico
+08 · Brujería, Wicca y Paganismo
+09 · Runas y Tradición Nórdica
+10 · Senda de la Mano Izquierda
+11 · Tradiciones Orientales
+12 · Adivinación: Tarot, Astrología y Oráculos
+13 · Mitología y Religiones Comparadas
+14 · Historia del Ocultismo
+15 · Filosofía Esotérica
+16 · Psicología y Misticismo
+17 · Teosofía y Espiritualidad Contemporánea
+18 · Anomalías y Enigmas
+19 · Pensamiento Libertario
+20 · Ciencias Sociales y Humanidades
+21 · Ficción y Literatura Visionaria
+22 · Referencia y Miscelánea
 ```
 
 **Sincronización con Mega**:
@@ -286,13 +299,13 @@ rm -rf node_modules package.json package-lock.json
 ## ⚠️ LIMITACIONES CONOCIDAS
 
 ### Embed de Mega.nz
-- **NO se puede embeber Mega en iframe**: Mega detecta `window.top !== window.self` en su JS y bloquea el renderizado
-- **NO se puede usar CORS proxy**: La clave de descifrado está en el fragmento de URL (no se envía al servidor)
-- **Solución actual**: `window.open()` abre el embed de Mega en pestaña nueva
-- **Alternativa futura**: Migrar PDFs selectos a GitHub Releases o Internet Archive para embed real con PDF.js
+- `mega.nz/file/...` responde con `X-Frame-Options: SAMEORIGIN`: no se puede incrustar.
+- `mega.nz/embed/...` **sí** responde 200 sin `X-Frame-Options`: se incrusta en el modal mediante iframe.
+- La clave de descifrado viaja en el fragmento de URL, que no se envía al servidor: un proxy CORS no puede descargar el PDF.
+- El embed de Mega solo muestra el comienzo del documento; para lectura completa hace falta descarga y descifrado en cliente.
 
 ### Clasificación automática
-- ~71% de los libros están en "Ocultismo General" — el clasificador por keywords no es perfecto
+- La clasificación se hace por obras canónicas, familias de autor y reglas de materias; el fondo sin identificar queda en la sala 22.
 - Libros sin autor claro en el nombre del archivo quedan como "Autor Desconocido"
 
 ---
@@ -464,4 +477,4 @@ git push origin main
 
 ---
 
-*Última actualización: Julio 2026 · 1,567 libros · 20 categorías · 594 KB*
+*Última actualización: Octubre 2026 · 2,479 libros · 22 salas · 862 KB*

@@ -1,0 +1,449 @@
+{
+  "total_original": 2547,
+  "total_final": 2479,
+  "descartes": 26,
+  "por_sala": {
+    "01 · Thelema y Crowleyana": 62,
+    "02 · Magia del Caos": 92,
+    "03 · Grimorios y Magia Ceremonial": 230,
+    "04 · Cábala y Misticismo Hebreo": 40,
+    "05 · Hermetismo y Alquimia": 43,
+    "06 · Tradición Egipcia": 27,
+    "07 · Gnosticismo y Cristianismo Esotérico": 31,
+    "08 · Brujería, Wicca y Paganismo": 61,
+    "09 · Runas y Tradición Nórdica": 30,
+    "10 · Senda de la Mano Izquierda": 113,
+    "11 · Tradiciones Orientales": 59,
+    "12 · Adivinación: Tarot, Astrología y Oráculos": 64,
+    "13 · Mitología y Religiones Comparadas": 91,
+    "14 · Historia del Ocultismo": 32,
+    "15 · Filosofía Esotérica": 31,
+    "16 · Psicología y Misticismo": 39,
+    "17 · Teosofía y Espiritualidad Contemporánea": 99,
+    "18 · Anomalías y Enigmas": 129,
+    "19 · Pensamiento Libertario": 32,
+    "20 · Ciencias Sociales y Humanidades": 138,
+    "21 · Ficción y Literatura Visionaria": 20,
+    "22 · Referencia y Miscelánea": 1016
+  },
+  "stats": {
+    "autor": 632,
+    "titulo": 663,
+    "obra": 511,
+    "resumen": 2375,
+    "idioma": 197,
+    "dup": 42
+  },
+  "fusiones": [
+    {
+      "titulo": "Ocho Conferencias sobre Yoga",
+      "autor": "Aleister Crowley",
+      "descartado": "Eight Lectures on Yoga",
+      "link": "https://mega.nz/file/fQU1SYqA#gb33yMsZMUSSKeX4eczs43qClfIVYtzZ5SG2jJCDrRQ"
+    },
+    {
+      "titulo": "(Sin título)",
+      "autor": "Aleister Crowley",
+      "descartado": "(Sin título)",
+      "link": "https://mega.nz/file/nBNi2ByK#GD7LNB6IN0ohs9jjE80dXDDSB2U3Yajd_jhXZqBGTl0"
+    },
+    {
+      "titulo": "(Sin título)",
+      "autor": "Autor Desconocido",
+      "descartado": "(Sin título)",
+      "link": "https://mega.nz/file/6U101KaC#n5g7M-H7v45ghzfNbzA75U351ud_Nf8xJqvehjQM_Go"
+    },
+    {
+      "titulo": "(Sin título)",
+      "autor": "Autor Desconocido",
+      "descartado": "(Sin título)",
+      "link": "https://mega.nz/file/eY9ijBwJ#6FVgOftOHlJb56ZyjwySfPW5RqxrqL1f9dn6OECi5Io"
+    },
+    {
+      "titulo": "(Sin título)",
+      "autor": "Autor Desconocido",
+      "descartado": "(Sin título)",
+      "link": "https://mega.nz/file/LV8nyBYK#6ZMp7XvFEehhCIyv1QFGV5ICuoc-hekIZHUq6GEfeK8"
+    },
+    {
+      "titulo": "(Sin título)",
+      "autor": "Autor Desconocido",
+      "descartado": "(Sin título)",
+      "link": "https://mega.nz/file/LQ8CSLhB#ztgJAmlNR02PtulxaTS4iMEfSmwFHoqHWWLDvTYdcys"
+    },
+    {
+      "titulo": "Corpus Hermeticum",
+      "autor": "Hermes Trismegisto",
+      "descartado": "Corpus hermeticum",
+      "link": "https://mega.nz/file/PAFzkB5A#lhvtv95fYg_ZTiDGmG0F5S1kn3-Cz0iUdKaxgOD-kkc"
+    },
+    {
+      "titulo": "El Ocultismo",
+      "autor": "Colin Wilson",
+      "descartado": "Antología del Ocultismo",
+      "link": "https://mega.nz/file/XdMXyLYB#j7hLU53akEqhTpfRvcGzZv23Tum2QAQyP_DbIU6n2s0"
+    },
+    {
+      "titulo": "El Ocultismo",
+      "autor": "Colin Wilson",
+      "descartado": "Antología del Ocultismo",
+      "link": "https://mega.nz/file/WNtnSQJA#j4XIFvUd6OkUdUJMC3m9n9Nd8kOFSXLwjv2uOJa140A"
+    },
+    {
+      "titulo": "Gamaliel The Diary Of A Vampire",
+      "autor": "Kenneth Grant",
+      "descartado": "Gamaliel The Diary Of A Vampire",
+      "link": "https://mega.nz/file/bMdTnbpJ#AaJ9FDn7clZBe7tQkXVnxL-Y60Xd5MstkZdGEki9kXo"
+    },
+    {
+      "titulo": "Francis - The Secret Rituals O.T.O",
+      "autor": "King",
+      "descartado": "Francis - The Secret Rituals O.T.O",
+      "link": "https://mega.nz/file/nBtSFKqQ#rA_2v26dlMkSQ4wuT9se3ygd6z0PkRO4EAHkRwc1gpk"
+    },
+    {
+      "titulo": "Grandes Misterios del Mundo",
+      "autor": "Autor Desconocido",
+      "descartado": "la clave de los grandes misterios",
+      "link": "https://mega.nz/file/PR9QRKDQ#37zugjzD-2IELMMx6QsGp5O-f6gL3K9i-AtuAEU0qFg"
+    },
+    {
+      "titulo": "(Sin título)",
+      "autor": "Autor Desconocido",
+      "descartado": "(Sin título)",
+      "link": "https://mega.nz/file/TEkHESgC#kff9sz9jEwH3f9SdFkahsIKZs9eSHwYqtmo9wEwC-Bc"
+    },
+    {
+      "titulo": "Malleus Maleficarum",
+      "autor": "Heinrich Kramer y Jacob Sprenger",
+      "descartado": "Malleus Maleficarum",
+      "link": "https://mega.nz/file/XV0ngTaY#HptalC59hlKfb8z4ryWr31fYO5ZPKwLOgWDVdo1b6P4"
+    },
+    {
+      "titulo": "'s Compleat",
+      "autor": "Min",
+      "descartado": "'s Compleat",
+      "link": "https://mega.nz/file/GU9QHSJB#a4C1slTWr7-_94eUDbNYgj1r3JnqBoE1-tgmpJnkur4"
+    },
+    {
+      "titulo": "Sepher Yetzirah",
+      "autor": "William Wynn Westcott",
+      "descartado": "Sepher Yetzirah",
+      "link": "https://mega.nz/file/2J0i0QrY#ktqugVAnw7w9SsW__yMpQ5YkGOaYHMSpK1fKmamSsHk"
+    },
+    {
+      "titulo": "(Sin título)",
+      "autor": "Paracelso",
+      "descartado": "(Sin título)",
+      "link": "https://mega.nz/file/eVlzGRxI#18QVHuiuz-cJpHZoZcgqNjIX-Zkgm-RRaM1glLgSnpw"
+    },
+    {
+      "titulo": "(Sin título)",
+      "autor": "Paracelso",
+      "descartado": "(Sin título)",
+      "link": "https://mega.nz/file/7I80kDJT#gJs9wi3JOQaMh9CKXr8NJ-gO77HbUjjCQjD21SBTVys"
+    },
+    {
+      "titulo": "(Sin título)",
+      "autor": "Paracelso",
+      "descartado": "(Sin título)",
+      "link": "https://mega.nz/file/HYlykSjC#iyJn7CUgRkA2Y9Fc_yUfGUAP0E1LhzykjTiZI2Tk6Ts"
+    },
+    {
+      "titulo": "Oven-Ready Chaos",
+      "autor": "Phil Hine",
+      "descartado": "Oven Ready Chaos",
+      "link": "https://mega.nz/file/qA9yUC4C#5vnvlWeQ2prDom_dserPLtRzUqn-L7t_6IX4lt_r1Qg"
+    },
+    {
+      "titulo": "Amazing New Mind Power Secret",
+      "autor": "Autor Desconocido",
+      "descartado": "Amazing New Mind Power Secret",
+      "link": "https://mega.nz/file/2MMkxDQT#lM5M8jJ9vmIMkYub1kmJ1Lm5tELkJCRjzCZbKt96JXU"
+    },
+    {
+      "titulo": "Sepher Yetzirah",
+      "autor": "William Wynn Westcott",
+      "descartado": "Sepher Yetzirah",
+      "link": "https://mega.nz/file/zJkwGbgJ#915xmjSsnhNgwtwE21EWJtKuIt-2127ZQd_KGeQfuaM"
+    },
+    {
+      "titulo": "El Simbolismo del Tarot",
+      "autor": "P. D. Ouspensky",
+      "descartado": "Symbolism of the Tarot",
+      "link": "https://mega.nz/file/CUk2BTiI#gGrZR3K2B2DvfMfzzoroqWQJVx0X7dWeKlXPNH5oDgg"
+    },
+    {
+      "titulo": "Sobre Set",
+      "autor": "Templo de Set",
+      "descartado": "Religion and Daemonology",
+      "link": "https://mega.nz/file/vU1GQTqD#UFaLoj-f_UJj95UTf7rXD227iHjMQkcbK_5knLQFsGI"
+    },
+    {
+      "titulo": "Aradia — El Evangelio de las Brujas",
+      "autor": "Charles Godfrey Leland",
+      "descartado": "Aradia",
+      "link": "https://mega.nz/file/eIUXCZJL#SIndhhtufc4hfI0JQp-KSfk1B0JMJNVyb5f1rNkMp0A"
+    },
+    {
+      "titulo": "Uncle Setnakt Sez",
+      "autor": "Don Webb",
+      "descartado": "Uncle Setnakt Sez",
+      "link": "https://mega.nz/file/KBMTTLIQ#ubQbr00tKKyEwf922eXmyq9IttP-2rCMBuzKoxH35gY"
+    },
+    {
+      "titulo": "Uncle Setnakt Sez",
+      "autor": "Don Webb",
+      "descartado": "Uncle Setnakt Sez",
+      "link": "https://mega.nz/file/eJcAnSYI#RZ0q0fdjOlmmtATIt6zs0iNwHXdkg7aAD-_O4oD0sjc"
+    },
+    {
+      "titulo": "Uncle Setnakt Sez",
+      "autor": "Don Webb",
+      "descartado": "Uncle Setnakt Sez",
+      "link": "https://mega.nz/file/PZ1FGZoY#pbFvxEzBEBS44Mzkt05Vj3O08qsvAPDjOtHn5wSCNCg"
+    },
+    {
+      "titulo": "Uncle Setnakt Sez",
+      "autor": "Don Webb",
+      "descartado": "Uncle Setnakt Sez",
+      "link": "https://mega.nz/file/iY0TBAJA#M1ntbmqAhJrXIW5qBP3f80yiPtZ5O9pTW3aujd0CWe8"
+    },
+    {
+      "titulo": "Uncle Setnakt Sez",
+      "autor": "Don Webb",
+      "descartado": "Uncle Setnakt Sez",
+      "link": "https://mega.nz/file/7VN1hSDY#7UIvt9f6xxEA1AspWFWa8Jd5wynpgu-tw-6cE_zABOU"
+    },
+    {
+      "titulo": "Magia Astral",
+      "autor": "Stephen Mace y Phil Hine",
+      "descartado": "Magia Astral",
+      "link": "https://mega.nz/file/XBEikJBR#sJRvnxZ3pT7c5e8vlacvFowORpo2IGFzbMGkjn2y1To"
+    },
+    {
+      "titulo": "Jinn Sorcery",
+      "autor": "Autor Desconocido",
+      "descartado": "Jinn Sorcery",
+      "link": "https://mega.nz/file/2dcSSZSJ#_5or8R9aLsbLxet6e882THI7_HaTX2six-t_7IDlFvs"
+    },
+    {
+      "titulo": "Crystal-gazing and spiritual clairvoyance",
+      "autor": "Autor Desconocido",
+      "descartado": "Crystal-gazing and spiritual clairvoyance",
+      "link": "https://mega.nz/file/iZ9H3BCL#UITFQbIiuNEp2vO4beDvc3Y42foWcw6hI9p8iwDK9Yc"
+    },
+    {
+      "titulo": "Divulgations sensationnelles des vrais secrets [...]Legran Alexandre bpt6k1193691q",
+      "autor": "Autor Desconocido",
+      "descartado": "Divulgations sensationnelles des vrais secrets [...]Legran Alexandre bpt6k1193691q",
+      "link": "https://mega.nz/file/DcE3FRDQ#b0_ZyMt9QCZ8rcz1tzyJmKp2hkPATr0IS_wMH4MwJqM"
+    },
+    {
+      "titulo": "Telepathy and the Etheric Vehicle",
+      "autor": "Alice A. Bailey",
+      "descartado": "Telepathy and the Etheric Vehicle",
+      "link": "https://mega.nz/file/iUl0yb6A#IicuBMkxR-SyV1InBcw0rJ0ndYnhKm6QwN2-J1xhUL0"
+    },
+    {
+      "titulo": "Dios y el Estado",
+      "autor": "Mijaíl Bakunin",
+      "descartado": "Dios y el Estado",
+      "link": "https://mega.nz/file/HE0BHI4Y#aNR5tcG8RyDj9pGc8IucT6T3pyvtdhs9LCemOxzk6Fg"
+    },
+    {
+      "titulo": "Imagenes Y Simbolos",
+      "autor": "Mircea Eliade",
+      "descartado": "Imagenes Y Simbolos",
+      "link": "https://mega.nz/file/GNNQiahY#eKhGbWhPZaY-1RvQ9vH9LIQ85aSIH37MLyPrNgWIXVU"
+    },
+    {
+      "titulo": "Herreros y alquimistas",
+      "autor": "Mircea Eliade",
+      "descartado": "Herreros y alquimistas",
+      "link": "https://mega.nz/file/SI9RCDyZ#TFUNnw5nv6mzRq_4EjMbZ7eJ-d0_bLTxS9hVe8kD7GQ"
+    },
+    {
+      "titulo": "Imagenes y Simbolos",
+      "autor": "Mircea Eliade",
+      "descartado": "Imagenes y Simbolos",
+      "link": "https://mega.nz/file/zBdAAZJK#5fB6hNGjaXFZWdPCxImHFvhNpE5i4iqZQ7-r3mwYGPM"
+    },
+    {
+      "titulo": "El Mundo de la Grafología",
+      "autor": "Autor Desconocido",
+      "descartado": "El Mundo de la Grafología",
+      "link": "https://mega.nz/file/PR8STIJL#6DRqqpu2VSmnaMFdCvCkCGVNpfuQg-mtTNdPODXk0n4"
+    },
+    {
+      "titulo": "grafologia superior editado",
+      "autor": "Autor Desconocido",
+      "descartado": "grafologia superior editado",
+      "link": "https://mega.nz/file/vAFDXCBQ#RFZmWnzXT2jCBM-4v0KoOqaEoRB6xz_5Y1vQDaPafnk"
+    },
+    {
+      "titulo": "¿Qué Significa Hablar -Bourdieu",
+      "autor": "Autor Desconocido",
+      "descartado": "¿Qué Significa Hablar -Bourdieu",
+      "link": "https://mega.nz/file/uEdxgS4S#sce203GbP6GAMItk945GNKT3lOjAdKhK7tHKKWHYCKg"
+    }
+  ],
+  "lista_descartes": [
+    {
+      "titulo": "El Enigma De Los Dinosaurios",
+      "autor": "Wilford John Noble",
+      "link": "https://mega.nz/file/iJ0RVCzb#cClidTzrB4rdCQgsONR91S_Jdo20zvr1HpuIP-rLhTA",
+      "motivo": "fuera de tema"
+    },
+    {
+      "titulo": "Win Friends and Influence People",
+      "autor": "Dale Carnegie",
+      "link": "https://mega.nz/file/KcUDVLIS#HW-QyfEkdbYkd5TWs8X353YJKrB4L6hJpks3xX8Ehts",
+      "motivo": "fuera de tema"
+    },
+    {
+      "titulo": "Hugh Thomas La trata de esclavos 1440 1870 1997",
+      "autor": "Autor Desconocido",
+      "link": "https://mega.nz/file/2VEUhZBb#n6jiRjf15j2iuF4yc_dfBU0ksXdLNVm7Bocol-7koOA",
+      "motivo": "fuera de tema"
+    },
+    {
+      "titulo": "Aromaterapia y plantas",
+      "autor": "Autor Desconocido",
+      "link": "https://mega.nz/file/SYUFCCJZ#h0vNs6LqK6FAUaHTmTtENHkZrV_x2GAJyWnf4nUCKis",
+      "motivo": "fuera de tema"
+    },
+    {
+      "titulo": "Bofci-38,9 3",
+      "autor": "Autor Desconocido",
+      "link": "https://mega.nz/file/XcNlCBhD#nEzU0ibCSOaS1B-kUFEegxVW8CbYxmp900kYkTu-Di0",
+      "motivo": "fuera de tema"
+    },
+    {
+      "titulo": "Easy Way To Stop Smoking",
+      "autor": "Stop Smoking",
+      "link": "https://mega.nz/file/jBFF2LKR#RjEZDfYIhLH4xGTW8Zf7qPOF-YXYUvxKaP3mkBZo74A",
+      "motivo": "fuera de tema"
+    },
+    {
+      "titulo": "Global Tyranny Step By Step - The United Nations and the Emerging New World Order",
+      "autor": "Autor Desconocido",
+      "link": "https://mega.nz/file/idlAmQyC#6S4ZvPrPy4vQ4CIgsRfuVd-ahMn6HKFVGBP97-FnBsI",
+      "motivo": "fuera de tema"
+    },
+    {
+      "titulo": "hitler in argentina",
+      "autor": "Autor Desconocido",
+      "link": "https://mega.nz/file/aZcTVCqK#kVvXySX9DfIDGVrddFzlSEYsXCxSHDPqut9cMKI93hs",
+      "motivo": "fuera de tema"
+    },
+    {
+      "titulo": "Jewish Supremacism",
+      "autor": "Autor Desconocido",
+      "link": "https://mega.nz/file/eIsyGDrT#BiBnQrFOCrxvD7PcBPX4YpgtVPCMwXx47rMq0zyVpm0",
+      "motivo": "fuera de tema"
+    },
+    {
+      "titulo": "Natural Cures They Don't Want You To Know About",
+      "autor": "Kevin Trudeau",
+      "link": "https://mega.nz/file/DMMwRYJS#FrGLtRKjRULQo6MlS0g3_XbQHfaI2DBqyRUng9ArUrw",
+      "motivo": "fuera de tema"
+    },
+    {
+      "titulo": "Think And Grow Rich",
+      "autor": "Napoleon Hill",
+      "link": "https://mega.nz/file/OcUjzBAR#ZmBepR5eMmm9t0Kz-Ls2JVhAT7SjkSc74ADDaRYZLtg",
+      "motivo": "fuera de tema"
+    },
+    {
+      "titulo": "Northwoods Document",
+      "autor": "Autor Desconocido",
+      "link": "https://mega.nz/file/qdcTwJ5T#_kQxynF9Md2aG4CdqE510m8hr6bRRkvomg_nDC4_gX8",
+      "motivo": "fuera de tema"
+    },
+    {
+      "titulo": "The Insiders: By John F. McManus",
+      "autor": "Autor Desconocido",
+      "link": "https://mega.nz/file/uYEHzAwa#tSJxdNGVKb100cUu0TaSt3K8HFQ2Zeg-7TP-h_m25TM",
+      "motivo": "fuera de tema"
+    },
+    {
+      "titulo": "The Incredible Rockefellers",
+      "autor": "Autor Desconocido",
+      "link": "https://mega.nz/file/WYFwUbQJ#NXbttD3E0YSZsmHABZJ0vr8UTNViggSZRB9cunpLWAc",
+      "motivo": "fuera de tema"
+    },
+    {
+      "titulo": "The Jewish Utopia (Authentic Zionist",
+      "autor": "Mein Kampf)",
+      "link": "https://mega.nz/file/qQ1mhCAa#xvLr8NXXTOr4lMzGByu3tvPaMjCBk1CKPO9gIQA82oc",
+      "motivo": "fuera de tema"
+    },
+    {
+      "titulo": "The Structure of Intelligence",
+      "autor": "Ben Goertz",
+      "link": "https://mega.nz/file/3NdSVJSS#AP33-f3a2TAnMD-Dtx9IL-1PrP3JlChKOGuaqBaKXyk",
+      "motivo": "fuera de tema"
+    },
+    {
+      "titulo": "U.S. Army Special Forces Caching Techniques (Hiding & Storing",
+      "autor": "Stuff Safely)",
+      "link": "https://mega.nz/file/bdFBTYBJ#51M_nkSVzNT9WpJinqbHs6HBmP26WUIKHL1wibW1SfU",
+      "motivo": "fuera de tema"
+    },
+    {
+      "titulo": "manual-aromaterapia",
+      "autor": "Autor Desconocido",
+      "link": "https://mega.nz/file/bEs2iJ5L#X6PzY5zuDx8idbpLb8GxC7yfACcc0d_88e38bQOTWj0",
+      "motivo": "fuera de tema"
+    },
+    {
+      "titulo": "Jengibre y sus usos en el BDSM- Ahv Alen Essen",
+      "autor": "Clauneck Kiar",
+      "link": "https://mega.nz/file/rNFDlaTI#A53nWz74cmXAclqg1t7vX5OIwFxxC27OPl8GXCTE-B0",
+      "motivo": "fuera de tema"
+    },
+    {
+      "titulo": "90 euros - Noviembre 2022",
+      "autor": "PVP",
+      "link": "https://mega.nz/file/fAskSAyK#HviE67hNrlGKm7899WRilpLnuW6efDs5z3in-aBPIIw",
+      "motivo": "fuera de tema"
+    },
+    {
+      "titulo": "Inspiritu Jewelry",
+      "autor": "Marie French",
+      "link": "https://mega.nz/file/CUV3gTja#QAv_2508MmNK0hpp3HClN4T9UiPcQxJv7UM0LsqVXT0",
+      "motivo": "fuera de tema"
+    },
+    {
+      "titulo": "Spooky Tapestry Crochet",
+      "autor": "Emily Chavez",
+      "link": "https://mega.nz/file/rMtwUTBa#RvP651u2KHb2a2FL8h8nUt-rF4JgCaBLCpwlH5Tp8GQ",
+      "motivo": "fuera de tema"
+    },
+    {
+      "titulo": "como dibujar manga",
+      "autor": "Autor Desconocido",
+      "link": "https://mega.nz/file/2BElWb5J#4POrMf63cbH5rttk8naO-8VCOuIavGub5ECRIM64qMU",
+      "motivo": "fuera de tema"
+    },
+    {
+      "titulo": "El Huerto Familiar del Sureste de México",
+      "autor": "Autor Desconocido",
+      "link": "https://mega.nz/file/zN0i0AxI#JURVITH7GQYmU6unuTNhNbvlc3aZgOl8PBsC_U-Hpxc",
+      "motivo": "fuera de tema"
+    },
+    {
+      "titulo": "La cocina como patrimonio (in) tangible",
+      "autor": "Autor Desconocido",
+      "link": "https://mega.nz/file/LM0nzSBZ#BA84ElyiRZkFa8S7DoWjQvlXlmKf62x7LfFFSazNQmo",
+      "motivo": "fuera de tema"
+    },
+    {
+      "titulo": "70 45663",
+      "autor": "Autor Desconocido",
+      "link": "https://mega.nz/file/WUN2zCBa#BwpsRbbx8cjlUTATv2fSc45_fHtNirttCus3kodF02M",
+      "motivo": "fuera de tema"
+    }
+  ]
+}

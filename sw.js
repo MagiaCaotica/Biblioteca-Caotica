@@ -1,9 +1,9 @@
-/* ═══════════════════════════════════════════════════════════════════
+/* ======================================================================
    BIBLIOTECA CAÓTICA ARCANA — SERVICE WORKER
    Cache-First Strategy | Offline Support | Performance
-   ═══════════════════════════════════════════════════════════════════ */
+   ====================================================================== */
 
-const CACHE_NAME = 'biblioteca-caotica-v4';
+const CACHE_NAME = 'biblioteca-caotica-v5';
 const ASSETS_TO_CACHE = [
     '/Biblioteca-Caotica/',
     '/Biblioteca-Caotica/index.html',
@@ -17,7 +17,7 @@ const ASSETS_TO_CACHE = [
 
 const DATA_CACHE = 'biblioteca-caotica-data-v2';
 
-// ── Install: Pre-cache static assets ──────────────────────────
+// -- Install: Pre-cache static assets --------------------------
 self.addEventListener('install', event => {
     event.waitUntil(
         caches.open(CACHE_NAME).then(cache => {
@@ -27,7 +27,7 @@ self.addEventListener('install', event => {
     );
 });
 
-// ── Activate: Clean old caches ────────────────────────────────
+// -- Activate: Clean old caches --------------------------------
 self.addEventListener('activate', event => {
     event.waitUntil(
         caches.keys().then(cacheNames => {
@@ -43,7 +43,7 @@ self.addEventListener('activate', event => {
     );
 });
 
-// ── Fetch: Cache-first with network fallback ──────────────────
+// -- Fetch: Cache-first with network fallback ------------------
 self.addEventListener('fetch', event => {
     const url = new URL(event.request.url);
 

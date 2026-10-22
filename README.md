@@ -5,7 +5,7 @@
 <h1 align="center">Biblioteca Caótica Arcana</h1>
 
 <p align="center">
-  <strong>+1,365 grimorios · 38 categorías · 3 idiomas · Descarga gratuita</strong>
+  <strong>+2,479 grimorios · 22 salas · 2 idiomas · Descarga gratuita</strong>
 </p>
 
 <p align="center">
@@ -45,16 +45,16 @@ Todos los libros están enlazados a **Mega.nz** para descarga directa, organizad
 
 | | |
 |---|---|
-| 📚 **Libros indexados** | 1,365+ |
-| 🏷️ **Categorías** | 38 |
-| 🌐 **Idiomas** | Español · English · Français |
+| 📚 **Libros indexados** | 2,479 |
+| 🏷️ **Categorías** | 22 |
+| 🌐 **Idiomas** | Español · Inglés |
 | 📦 **Tamaño de datos** | ~0.79 MB (puro texto) |
 | ⚡ **Peso total de página** | < 1 MB |
 | 🔗 **Enlaces** | Todos a Mega.nz vía AdFoc.us |
 
 ### Categorías
 
-`Magia del Caos` `Cábala` `Alquimia` `Tarot` `Hermetismo` `Wicca y Brujería` `Magia Práctica` `Magia Sexual` `Magia Moderna / DKMU` `Satanismo y Luciferismo` `Senda de la Mano Izquierda` `Grimorios Clásicos` `Grimorios / Genios` `Runas y Tradición Nórdica` `Celtismo / Paganismo` `Paganismo` `Misterios Egipcios` `Gnosticismo` `Rosacrucismo` `Órdenes Secretas` `Ocultismo General` `Ocultismo Clásico` `Ocultismo Comparado` `Astrología` `Clarividencia` `Magia Herbolaria` `Magia Tradicional` `Teoría Mágica / Hiperstición` `Tecnomagia` `Filosofía Oriental` `Espiritualidad` `Mitología / Ocultismo` `Biografía / Ocultismo` `Investigación` `Entrevistas / Teoría`
+`01 · Thelema y Crowleyana` `02 · Magia del Caos` `03 · Grimorios y Magia Ceremonial` `04 · Cábala y Misticismo Hebreo` `05 · Hermetismo y Alquimia` `06 · Tradición Egipcia` `07 · Gnosticismo y Cristianismo Esotérico` `08 · Brujería, Wicca y Paganismo` `09 · Runas y Tradición Nórdica` `10 · Senda de la Mano Izquierda` `11 · Tradiciones Orientales` `12 · Adivinación: Tarot, Astrología y Oráculos` `13 · Mitología y Religiones Comparadas` `14 · Historia del Ocultismo` `15 · Filosofía Esotérica` `16 · Psicología y Misticismo` `17 · Teosofía y Espiritualidad Contemporánea` `18 · Anomalías y Enigmas` `19 · Pensamiento Libertario` `20 · Ciencias Sociales y Humanidades` `21 · Ficción y Literatura Visionaria` `22 · Referencia y Miscelánea`
 
 ---
 
@@ -62,7 +62,7 @@ Todos los libros están enlazados a **Mega.nz** para descarga directa, organizad
 
 ### 🔍 Búsqueda y Descubrimiento
 - **Buscador completo** por título, autor y resumen con búsqueda instantánea (debounce 250ms)
-- **Filtros duales** por categoría (38) e idioma (ES/EN/FR) combinables entre sí
+- **Filtros duales** por categoría (22) e idioma (ES/EN/FR) combinables entre sí
 - **Scroll infinito** con IntersectionObserver — carga 12 libros por lote al hacer scroll
 - **Atajo de teclado**: `Ctrl + K` o `/` para enfocar el buscador al instante
 
@@ -107,7 +107,7 @@ Optimizado para que ChatGPT, Gemini, Perplexity, Claude y otros LLMs puedan enco
 - **Snippet canónico** oculto que responde "¿Qué es la Biblioteca Caótica Arcana?" en el primer párrafo
 - **Datos estructurados** en JSON-LD que los LLMs pueden parsear
 - **Definiciones explícitas** en footer y descripciones
-- **Cobertura completa** de subtemas (38 categorías listadas)
+- **Cobertura completa** de subtemas (22 salas listadas)
 
 ### 📄 Visor PDF Online
 Visor de documentos integrado con PDF.js 4.7:
@@ -119,7 +119,7 @@ leer.html?url=URL_DEL_PDF&titulo=Título%20del%20Documento
 - **Zoom** con `Ctrl + Scroll`
 - Mensaje de error descriptivo cuando el PDF no es accesible
 
-> ⚠️ **Importante**: Los archivos en Mega.nz usan cifrado cliente-servidor y CORS restrictivo, por lo que **no pueden visualizarse directamente** en el navegador. El visor está preparado para PDFs con URL pública directa.
+> ⚠️ **Importante**: las URL `mega.nz/file/...` no se pueden incrustar (Mega envía `X-Frame-Options: SAMEORIGIN`), pero `mega.nz/embed/...` sí: la previsualización se abre dentro de la web mediante un iframe. El visor `leer.html` sigue disponible para PDFs con URL pública directa.
 
 ### 📲 PWA (Progressive Web App)
 - **`manifest.json`** con nombre, íconos, colores, orientación
@@ -143,7 +143,7 @@ Biblioteca-Caotica/
 ├── index.html               # Página principal · SEO + GEO + Schema + W3C + ARIA
 ├── style.css                # Estilos · Custom Properties · WCAG AA · Responsive · Print
 ├── script.js                # Lógica · IntersectionObserver · Debounce · Fragment DOM
-├── biblioteca_datos.js      # Base de datos · 1,365 entradas · ~828 KB
+├── biblioteca_datos.js      # Base de datos · 2,479 entradas · ~828 KB
 │
 ├── leer.html                # Visor PDF online con PDF.js 4.7
 ├── manifest.json            # PWA manifest · Instalable en móvil/desktop
@@ -167,7 +167,7 @@ Biblioteca-Caotica/
 | **Estructura** | HTML5 semántico | Landmarks ARIA, roles, W3C-compliant |
 | **Estilos** | CSS3 + Custom Properties | Tema oscuro, clamp(), Grid, animaciones |
 | **Lógica** | Vanilla JavaScript ES6+ | Sin frameworks · Sin dependencias de runtime |
-| **Datos** | Array estático en JS | 1,365 objetos · Carga síncrona incrustada |
+| **Datos** | Array estático en JS | 2,479 objetos · Carga síncrona incrustada |
 | **SEO** | Schema.org JSON-LD | WebSite + CollectionPage + BreadcrumbList |
 | **PDF** | PDF.js 4.7 (CDN) | Solo carga bajo demanda en `leer.html` |
 | **PWA** | Service Worker + Manifest | Cache-first · Offline-ready |
